@@ -50,4 +50,6 @@ Por qué: Tienda digital líder en música electrónica para DJs y productores.
 🔹 Estética: Profesional y optimizada para la búsqueda de música.
 🔹 Funcionalidades: Descargas de alta calidad, listas de éxitos y herramientas para DJs.
 
+Enlace al tablero https://trello.com/invite/b/683def61f699e58554a3c478/ATTI6be113f8471ed7404ef8d4e8d6e649dd74411A63/sprint-1-maqueta-web
+
 
