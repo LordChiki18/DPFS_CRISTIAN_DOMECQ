@@ -1,11 +1,247 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title><%= title %></title>
-    <link rel='stylesheet' href='/stylesheets/style.css' />
-  </head>
-  <body>
-    <h1><%= title %></h1>
-    <p>Welcome to <%= title %></p>
-  </body>
+<html lang="en">
+<!-- Head -->
+<%- include('partials/head.ejs') %>
+
+    <body>
+        <!-- Header -->
+        <%- include('partials/header.ejs') %>
+
+            <!-- Hero Section -->
+            <section class="hero">
+                <div class="container">
+                    <h1>Hero heading of moderate length goes here</h1>
+                    <div class="hero-buttons">
+                        <a href="users/register">
+                            <button class="btn btn-primary">
+                                Register</button>
+                        </a>
+                        <a href="/users/login">
+                            <button class="btn btn-secondary">
+                                Log In</button>
+                        </a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- E-Books Section -->
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">E-Books</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show-more">
+                        <a href="#">Show more</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Music Section -->
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Music</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show-more">
+                        <a href="#">Show more</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Courses Section -->
+            <section class="section">
+                <div class="container">
+                    <h2 class="section-title">Courses</h2>
+                    <div class="product-grid">
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                        <div class="product-card">
+                            <div class="product-image">
+                                <div class="image-placeholder">📖</div>
+                                <div class="product-badge sale">Sale</div>
+                            </div>
+                            <h3>Product</h3>
+                            <p class="product-description">Lorem ipsum dolor sit amet et detectus acommodtaer his consul
+                                copiosae</p>
+                            <div class="product-footer">
+                                <div class="price-section">
+                                    <div class="price-old">$179.99</div>
+                                    <div class="price">$129.99</div>
+                                    <div class="price-discount">Save $50.00</div>
+                                </div>
+                                <button class="btn-buy">
+                                    <i class="fa-solid fa-cart-shopping"></i>
+                                    Add to Cart
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="show-more">
+                        <a href="#">Show more</a>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <%- include('partials/footer.ejs') %>
+    </body>
+
 </html>

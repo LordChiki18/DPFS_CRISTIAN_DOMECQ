@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <!-- Header -->
+        <%- include('../partials/header.ejs') %>
+
+
+            <!-- Product Section -->
+            <section class="product-section">
+                <div class="container">
+                    <div class="product-container">
+                        <!-- Product Images -->
+                        <div class="product-images">
+                            <div class="main-image">
+                                <div class="main-image-placeholder">📦</div>
+                            </div>
+                            <div class="thumbnail-container">
+                                <div class="nav-arrow">‹</div>
+                                <div class="thumbnails">
+                                    <div class="thumbnail active">
+                                        <div class="thumbnail-placeholder">📦</div>
+                                    </div>
+                                    <div class="thumbnail">
+                                        <div class="thumbnail-placeholder">📦</div>
+                                    </div>
+                                    <div class="thumbnail">
+                                        <div class="thumbnail-placeholder">📦</div>
+                                    </div>
+                                </div>
+                                <div class="nav-arrow">›</div>
+                            </div>
+                        </div>
+
+                        <!-- Product Info -->
+                        <div class="product-info">
+                            <h1 class="product-name">Product Name</h1>
+                            <p class="product-description">
+                                Lorem ipsum dolor sit amet et detectus accommodare his consul copiosae legendos at vix
+                                ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute copiosae
+                                hendrerit.
+                                Eos erant prompta ex, est ea modo dignissim, vel at impetus iracundia comprehensam.
+                            </p>
+
+                            <div class="quantity-section">
+                                <span class="quantity-label">Quantity:</span>
+                                <div class="quantity-controls">
+                                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                    <input type="text" class="quantity-input" value="1" id="quantity" readonly>
+                                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                                </div>
+                            </div>
+
+                            <button class="add-to-cart-btn" onclick="addToCart()">
+                                <span>Add to Cart</span>
+                                <span>🛒</span>
+                            </button>
+
+                            <div class="product-meta">
+                                <p><span>Category:</span> Lorem Ipsum | <span class="in-stock">In stock</span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Footer -->
+            <%- include('../partials/footer.ejs') %>
+
+    </body>
+
+</html>
