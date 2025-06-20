@@ -2,310 +2,151 @@
 <html lang="es">
 <% include ../partials/head %>
 
-    <body>
-        <!-- Header -->
-        <%- include ../partials/header %>
+  <body>
+    <!-- Header -->
+    <%- include ../partials/header %>
 
-            <!-- Hero Section -->
-            <section class="hero">
-                <div class="container">
-                    <h1>Discover Amazing Products</h1>
-                    <p>Explore our wide range of high-quality products carefully selected for you</p>
-                    <div class="hero-buttons">
-                        <a href="#products" class="btn btn-primary">Shop Now</a>
-                        <a href="#filters" class="btn btn-secondary">Browse Categories</a>
-                    </div>
+      <!-- Hero Section -->
+      <section class="hero">
+        <div class="container">
+          <h1>Discover Amazing Products</h1>
+          <p>Explore our wide range of high-quality products carefully selected for you</p>
+        </div>
+      </section>
+
+      <!-- Filters Section -->
+      <section class="filters-section" id="filters">
+        <div class="container">
+          <div class="filters-container">
+            <form method="GET" action="/products">
+              <div class="filters-left">
+                <div class="filter-group">
+                  <label for="category">Category:</label>
+                  <select name="category" id="category" class="filter-select">
+                    <option value="all" <%=selectedCategory==='all' ? 'selected' : '' %>>All Categories</option>
+                    <option value="ebook" <%=selectedCategory==='ebook' ? 'selected' : '' %>>Ebook</option>
+                    <option value="music" <%=selectedCategory==='music' ? 'selected' : '' %>>Music</option>
+                    <option value="course" <%=selectedCategory==='course' ? 'selected' : '' %>>Course</option>
+                  </select>
                 </div>
-            </section>
-
-            <!-- Filters Section -->
-            <section class="filters-section" id="filters">
-                <div class="container">
-                    <div class="filters-container">
-                        <div class="filters-left">
-                            <div class="filter-group">
-                                <label for="category">Category:</label>
-                                <select id="category" class="filter-select">
-                                    <option value="all">All Categories</option>
-                                    <option value="electronics">Electronics</option>
-                                    <option value="clothing">Clothing</option>
-                                    <option value="home">Home & Garden</option>
-                                    <option value="books">Books</option>
-                                    <option value="sports">Sports</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="price">Price:</label>
-                                <select id="price" class="filter-select">
-                                    <option value="all">All Prices</option>
-                                    <option value="0-50">$0 - $50</option>
-                                    <option value="50-100">$50 - $100</option>
-                                    <option value="100-200">$100 - $200</option>
-                                    <option value="200+">$200+</option>
-                                </select>
-                            </div>
-                            <div class="filter-group">
-                                <label for="sort">Sort by:</label>
-                                <select id="sort" class="filter-select">
-                                    <option value="name">Name</option>
-                                    <option value="price-low">Price: Low to High</option>
-                                    <option value="price-high">Price: High to Low</option>
-                                    <option value="newest">Newest First</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="results-info">
-                            <span>Showing 12 products</span>
-                        </div>
-                    </div>
+                <div class="filter-group">
+                  <label for="price">Price:</label>
+                  <select name="price" id="price" class="filter-select">
+                    <option value="all" <%=selectedPrice==='all' ? 'selected' : '' %>>Todos los precios</option>
+                    <option value="0-50000" <%=selectedPrice==='0-50000' ? 'selected' : '' %>>₲0 - ₲50.000</option>
+                    <option value="50000-100000" <%=selectedPrice==='50000-100000' ? 'selected' : '' %>>₲50.000 -
+                      ₲100.000</option>
+                    <option value="100000+" <%=selectedPrice==='100000+' ? 'selected' : '' %>>₲100.000 o más</option>
+                  </select>
+                  <div class="filter-group">
+                    <label for="sort">Sort by:</label>
+                    <select name="sort" id="sort" class="filter-select">
+                      <option value="name_asc" <%=selectedSort==='name_asc' ? 'selected' : '' %>>Nombre Ascendente
+                      </option>
+                      <option value="name_desc" <%=selectedSort==='name_desc' ? 'selected' : '' %>>Nombre Descendente
+                      </option>
+                      <option value="price_desc" <%=selectedSort==='price_desc' ? 'selected' : '' %>>Precio: Alto a Bajo
+                      </option>
+                      <option value="price_asc" <%=selectedSort==='price_asc' ? 'selected' : '' %>>Precio: Bajo a Alto
+                      </option>
+                      <option value="newest" <%=selectedSort==='newest' ? 'selected' : '' %>>Mas Nuevo</option>
+                      <option value="oldest" <%=selectedSort==='oldest' ? 'selected' : '' %>>Mas Antiguo</option>
+                    </select>
+                  </div>
                 </div>
-            </section>
+                <button type="submit"><i class="fa-solid fa-filter"></i></button>
+                <a href="/products?clear=true">
+                  <i class="fa-solid fa-filter-circle-xmark"></i>
+                </a>
+              </div>
 
-            <!-- Products Section -->
-            <section class="section" id="products">
-                <div class="container">
-                    <div class="product-grid">
-                        <!-- Product 1 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">🎧</div>
-                                <div class="product-badge sale">Sale</div>
-                            </div>
-                            <h3>Wireless Headphones</h3>
-                            <p class="product-description">High-quality wireless headphones with noise cancellation</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price-old">$179.99</div>
-                                    <div class="price">$129.99</div>
-                                    <div class="price-discount">Save $50.00</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
+            </form>
+            <div class="results-info">
+              <span id="results-count">Showing <%= products.length %> products</span>
+            </div>
+          </div>
 
-                        <!-- Product 2 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">⌚</div>
-                                <div class="product-badge new">New</div>
-                            </div>
-                            <h3>Smart Watch</h3>
-                            <p class="product-description">Advanced fitness tracking and notifications</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$299.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
+        </div>
+        </div>
+      </section>
 
-                        <!-- Product 3 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">👕</div>
-                            </div>
-                            <h3>Designer T-Shirt</h3>
-                            <p class="product-description">Premium cotton blend with modern design</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$49.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 4 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">☕</div>
-                            </div>
-                            <h3>Coffee Maker</h3>
-                            <p class="product-description">Programmable coffee maker with thermal carafe</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$89.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 5 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">📚</div>
-                            </div>
-                            <h3>JavaScript Guide</h3>
-                            <p class="product-description">Complete guide to modern JavaScript development</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$39.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 6 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">🧘</div>
-                            </div>
-                            <h3>Yoga Mat</h3>
-                            <p class="product-description">Non-slip yoga mat for all fitness levels</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$29.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 7 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">🔊</div>
-                                <div class="product-badge sale">Sale</div>
-                            </div>
-                            <h3>Bluetooth Speaker</h3>
-                            <p class="product-description">Portable speaker with premium sound quality</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price-old">$99.99</div>
-                                    <div class="price">$79.99</div>
-                                    <div class="price-discount">Save $20.00</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 8 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">👟</div>
-                            </div>
-                            <h3>Running Shoes</h3>
-                            <p class="product-description">Lightweight running shoes with advanced cushioning</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$159.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 9 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">💡</div>
-                                <div class="product-badge new">New</div>
-                            </div>
-                            <h3>Desk Lamp</h3>
-                            <p class="product-description">Adjustable LED desk lamp with USB charging</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$45.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 10 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">🧥</div>
-                            </div>
-                            <h3>Winter Jacket</h3>
-                            <p class="product-description">Waterproof winter jacket with thermal insulation</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$199.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 11 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">📱</div>
-                            </div>
-                            <h3>Tablet Stand</h3>
-                            <p class="product-description">Adjustable aluminum stand for tablets and phones</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$24.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
-
-                        <!-- Product 12 -->
-                        <div class="product-card">
-                            <div class="product-image">
-                                <div class="image-placeholder">🌱</div>
-                            </div>
-                            <h3>Garden Tool Set</h3>
-                            <p class="product-description">Complete set of essential gardening tools</p>
-                            <div class="product-footer">
-                                <div class="price-section">
-                                    <div class="price">$69.99</div>
-                                </div>
-                                <button class="btn-buy">
-                                    <i class="fa-solid fa-cart-shopping"></i>
-                                    Add to Cart
-                                </button>
-                            </div>
-                        </div>
+      <!-- Products Section -->
+      <div class="container">
+        <div class="product-grid">
+          <% products.forEach(product=> { %>
+            <a href="/products/<%= product.id %>">
+              <div class="product-card">
+                <div class="product-image">
+                  <div class="image-placeholder">
+                    <% if (product.discount)  { %>
+                      <span class="product-badge sale">SALE</span>
+                      <% } %>
+                      <img src="<%= product.images && product.images.length > 0 ? '/images/products/'+product.images[0] : '/images/default.png' %>" alt="<%= product.title %>" class="product-img">
+                  </div>
+                  <% if(product.badge) { %>
+                    <div class="product-badge <%= product.badge %>">
+                      <%= product.badge.charAt(0).toUpperCase() + product.badge.slice(1) %>
                     </div>
-
-                    <!-- Pagination -->
-                    <div class="pagination-section">
-                        <div class="pagination">
-                            <a href="#" class="pagination-btn">« Previous</a>
-                            <a href="#" class="pagination-btn active">1</a>
-                            <a href="#" class="pagination-btn">2</a>
-                            <a href="#" class="pagination-btn">3</a>
-                            <a href="#" class="pagination-btn">Next »</a>
-                        </div>
-                    </div>
+                    <% } %>
                 </div>
-            </section>
+                <h3>
+                  <%= product.title %>
+                </h3>
+                <p class="product-description">
+                  <%= product.description %>
+                </p>
+                <p class="product-tags">
+                  <b>Tags:</b>
+                  <%= product.tags %>
+                </p>
+                <div class="product-footer">
+                  <div class="price-section">
+                    <% if(product.oldPrice != product.price && product.oldPrice > 0) { %>
+                      <div class="price-old">₲<%= product.oldPrice.toLocaleString() %>
+                      </div>
+                      <% } %>
+                        <div class="price">₲<%= product.price.toLocaleString() %>
+                        </div>
+                        <% if (product.discount) { %>
+                          <div class="price-discount">
+                            <%= product.discount %>% OFF
+                          </div>
+                          <% } %>
+                  </div>
+                  <button class="btn-buy">
+                    <i class="fa-solid fa-cart-shopping"></i>
+                    Add to Cart
+                  </button>
+                </div>
+              </div>
+              <% }) %>
+        </div>
+        </a>
 
-            <!-- Footer -->
-            <%- include('../partials/footer.ejs') %>
 
-    </body>
+        <!-- Pagination -->
+        <div class="pagination-section">
+          <div class="pagination">
+            <% if (currentPage> 1) { %>
+              <a href="?page=<%= currentPage - 1%>" class="pagination-btn">« Previous</a>
+              <% } %>
+                <% for (let i=1; i <=totalPages; i++) { %>
+                  <a href="?page=<%= i %>&category=<% selectedCategory %>&price=<%= selectedPrice %>"
+                    class="pagination-btn <%= i === currentPage ? 'active' : '' %>">
+                    <%= i %>
+                  </a>
+                  <% } %>
+                    <% if (currentPage < totalPages) { %>
+                      <a href="?page=<%= currentPage + 1 %>" class="pagination-btn">Next</a>
+                      <% } %>
+          </div>
+        </div>
+      </div>
+      </section>
+
+      <!-- Footer -->
+
+  </body>
+      <%- include('../partials/footer.ejs') %>
 
 </html>

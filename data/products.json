@@ -1,0 +1,384 @@
+[
+  {
+    "id": 1,
+    "title": "Curso de Programación en JavaScript",
+    "description": "Aprendé JavaScript desde cero con ejercicios prácticos.",
+    "category": "course",
+    "price": 150000,
+    "oldPrice": 0,
+    "discount": 25,
+    "discountType": "percentage",
+    "sale": true,
+    "format": "video",
+    "tags": [
+      "programación",
+      "javascript",
+      "desarrollo web"
+    ],
+    "author": "Cristian Domecq",
+    "stock": true,
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 2,
+    "title": "Álbum: Lo Mejor del Rock",
+    "description": "Una selección de los mejores clásicos del rock.",
+    "category": "music",
+    "price": 10000,
+    "oldPrice": 10000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "audio",
+    "author": "Varios artistas",
+    "stock": false,
+    "tags": [
+      "rock",
+      "clásicos",
+      "música"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 3,
+    "title": "Ebook: Aprende Python",
+    "description": "Guía completa para aprender Python desde cero.",
+    "category": "ebook",
+    "price": 50000,
+    "oldPrice": 50000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "pdf",
+    "author": "Laura Martínez",
+    "stock": true,
+    "tags": [
+      "programación",
+      "python",
+      "desarrollo"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 4,
+    "title": "Curso de Fotografía Digital",
+    "description": "Domina la fotografía digital con técnicas avanzadas.",
+    "category": "course",
+    "price": 200000,
+    "oldPrice": 0,
+    "discount": 15,
+    "discountType": "percentage",
+    "format": "video",
+    "tags": [
+      "fotografía",
+      "arte",
+      "creatividad"
+    ],
+    "author": "Ana Pérez",
+    "stock": true,
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 6,
+    "title": "Ebook: Diseño Gráfico para Principiantes",
+    "description": "Aprende los fundamentos del diseño gráfico.",
+    "category": "ebook",
+    "price": 60000,
+    "oldPrice": 60000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "pdf",
+    "author": "Sofía López",
+    "stock": true,
+    "tags": [
+      "diseño",
+      "gráfico",
+      "arte"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 7,
+    "title": "Curso de Marketing Digital",
+    "description": "Estrategias efectivas para el marketing digital.",
+    "category": "course",
+    "price": 180000,
+    "oldPrice": 180000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "video",
+    "tags": [
+      "marketing",
+      "digital",
+      "negocios"
+    ],
+    "author": "Carlos Fernández",
+    "stock": true,
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 8,
+    "title": "Álbum: Música Electrónica Chillout",
+    "description": "Relájate con esta selección de música electrónica chillout.",
+    "category": "music",
+    "price": 75000,
+    "oldPrice": 75000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "audio",
+    "author": "Various Artists",
+    "stock": true,
+    "tags": [
+      "electrónica",
+      "chillout",
+      "relajación"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 9,
+    "title": "Ebook: Fotografía para Redes Sociales",
+    "description": "Cómo tomar fotos perfectas para tus redes sociales.",
+    "category": "ebook",
+    "price": 55000,
+    "oldPrice": 55000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "pdf",
+    "author": "María González",
+    "stock": true,
+    "tags": [
+      "fotografía",
+      "redes sociales",
+      "social media"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 10,
+    "title": "Curso de Desarrollo Web Full Stack",
+    "description": "Aprende a desarrollar aplicaciones web completas.",
+    "category": "course",
+    "price": 250000,
+    "oldPrice": 250000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "video",
+    "tags": [
+      "desarrollo web",
+      "full stack",
+      "programación"
+    ],
+    "author": "Javier Torres",
+    "stock": true,
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 11,
+    "title": "Álbum: Pop Internacional",
+    "description": "Los mejores éxitos del pop internacional.",
+    "category": "music",
+    "price": 85000,
+    "oldPrice": 85000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "audio",
+    "author": "Various Artists",
+    "stock": true,
+    "tags": [
+      "pop",
+      "internacional",
+      "música"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 12,
+    "title": "Ebook: Guía de Estilo para Blogs",
+    "description": "Cómo crear contenido atractivo para tu blog.",
+    "category": "ebook",
+    "price": 40000,
+    "oldPrice": 40000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "pdf",
+    "author": "Lucía Ramírez",
+    "stock": true,
+    "tags": [
+      "blog",
+      "escritura",
+      "contenido"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 13,
+    "title": "Curso de Inteligencia Artificial",
+    "description": "Introducción a la inteligencia artificial y sus aplicaciones.",
+    "category": "course",
+    "price": 1000,
+    "oldPrice": 1000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "video",
+    "tags": [
+      "inteligencia artificial",
+      "IA",
+      "tecnología"
+    ],
+    "author": "Roberto Sánchez",
+    "stock": true,
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 14,
+    "title": "Álbum: Música Clásica para Estudiar",
+    "description": "Música clásica ideal para concentrarse y estudiar.",
+    "category": "music",
+    "price": 20000,
+    "oldPrice": 20000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "audio",
+    "author": "Various Artists",
+    "stock": true,
+    "tags": [
+      "clásica",
+      "estudio",
+      "concentración"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 15,
+    "title": "Ebook: Marketing en Redes Sociales",
+    "description": "Estrategias de marketing para redes sociales.",
+    "category": "ebook",
+    "price": 65000,
+    "oldPrice": 65000,
+    "discount": 0,
+    "discountType": "none",
+    "format": "pdf",
+    "author": "Andrés Pérez",
+    "stock": true,
+    "tags": [
+      "marketing",
+      "redes sociales",
+      "social media"
+    ],
+    "images": [
+      "js.png",
+      "js2.jpg",
+      "js3.png"
+    ],
+    "createdAt": "2023-10-01T12:00:00Z",
+    "updatedAt": "2023-10-01T12:00:00Z"
+  },
+  {
+    "id": 16,
+    "title": "Prueba Multer Parte 1",
+    "description": "asdfasdfasd",
+    "category": "course",
+    "price": 150000,
+    "discount": 5,
+    "discountType": "percentage",
+    "sale": true,
+    "format": "document",
+    "tags": [
+      "jazz",
+      "clásicos",
+      "música",
+      "dance"
+    ],
+    "author": "Chiki IRL",
+    "stock": true,
+    "images": [
+      "1750435010802-product.png",
+      "1750435010803-product.png",
+      "1750435010808-product.png",
+      "1750435841399-product.png",
+      "1750435841403-product.png",
+      "1750435841408-product.png",
+      "1750435841412-product.png",
+      "1750435841414-product.png"
+    ],
+    "createdAt": "2025-06-19T02:13:59.665Z",
+    "updatedAt": "2025-06-20T16:10:41.420Z"
+  }
+]

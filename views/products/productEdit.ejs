@@ -1,368 +1,143 @@
 <!DOCTYPE html>
 <html lang="es">
 <% include ../partials/head.ejs %>
-<body>
-    <!-- Header -->
-    <% include ../partials/header.ejs %>
 
-    <!-- Formulario de Edición de Producto -->
-    <section class="form-section-products">
-        <div class="container">
-            <div class="form-container-products">
-                <h2 class="form-title-products">Editar Contenido Digital</h2>
-                
-                <form id="editProductForm" action="#" method="PUT" enctype="multipart/form-data">
-                    <!-- Campo oculto para ID del contenido -->
-                    <input type="hidden" id="contentId" name="contentId" value="12345">
-                    
-                    <!-- Tipo de Contenido -->
-                    <div class="form-group-products">
-                        <label for="contentType">Tipo de Contenido *</label>
-                        <select id="contentType" name="contentType" required onchange="toggleContentFields()">
-                            <option value="">Seleccione el tipo de contenido</option>
-                            <option value="course" selected>Curso</option>
-                            <option value="music">Música</option>
-                            <option value="ebook">E-book</option>
-                        </select>
-                    </div>
+    <body>
+        <% include ../partials/headerAdmin.ejs %>
 
-                    <!-- Título del Contenido -->
-                    <div class="form-group-products">
-                        <label for="name">Título *</label>
-                        <input type="text" id="name" name="name" required placeholder="Ingrese el título del contenido" value="Curso Completo de JavaScript Moderno">
-                    </div>
+            <section class="form-section-products">
+                <div class="container">
+                    <div class="form-container-products">
+                        <h2 class="form-title-products">Editar Contenido Digital</h2>
 
-                    <!-- Descripción -->
-                    <div class="form-group-products">
-                        <label for="description">Descripción *</label>
-                        <textarea id="description" name="description" required placeholder="Describa el contenido, qué aprenderán los estudiantes, etc.">Aprende JavaScript desde cero hasta nivel avanzado. Incluye ES6+, async/await, frameworks modernos y proyectos prácticos. Ideal para desarrolladores que quieren dominar el lenguaje más popular del mundo.</textarea>
-                    </div>
+                        <form action="/products/<%= product.id %>?_method=PUT" method="POST" id="editForm" enctype="multipart/form-data">
 
-                    <!-- Categoría y Precio -->
-                    <div class="form-row-products">
-                        <div class="form-group-products">
-                            <label for="category">Categoría *</label>
-                            <select id="category" name="category" required>
-                                <option value="">Seleccione una categoría</option>
-                                <option value="programming" selected>Programación</option>
-                                <option value="web-development">Desarrollo Web</option>
-                                <option value="mobile-development">Desarrollo Móvil</option>
-                                <option value="data-science">Ciencia de Datos</option>
-                                <option value="design">Diseño</option>
-                                <option value="business">Negocios</option>
-                            </select>
-                        </div>
+                            <input type="hidden" id="contentId" name="contentId" value="<%= product.id %>">
 
-                        <div class="form-group">
-                            <label for="price">Precio (USD) *</label>
-                            <input type="number" id="price" name="price" step="0.01" min="0" required placeholder="0.00" value="89.99">
-                        </div>
-                    </div>
-
-                    <!-- Campos específicos para CURSOS -->
-                    <div id="courseFields" class="content-specific-fields" style="display: block;">
-                        <div class="form-row">
+                            <!-- Título -->
                             <div class="form-group-products">
-                                <label for="duration">Duración (horas)</label>
-                                <input type="number" id="duration" name="duration" min="0" step="0.5" placeholder="Ej: 12.5" value="15.5">
+                                <label for="title">Título *</label>
+                                <input type="text" id="title" name="title" required value="<%= product.title %>"
+                                    placeholder="Ingrese el título del contenido">
                             </div>
+
+                            <!-- Descripción -->
                             <div class="form-group-products">
-                                <label for="level">Nivel</label>
-                                <select id="level" name="level">
-                                    <option value="">Seleccione el nivel</option>
-                                    <option value="beginner">Principiante</option>
-                                    <option value="intermediate" selected>Intermedio</option>
-                                    <option value="advanced">Avanzado</option>
-                                    <option value="all">Todos los niveles</option>
+                                <label for="description">Descripción *</label>
+                                <textarea id="description" name="description"
+                                    required><%= product.description %></textarea>
+                            </div>
+
+                            <!-- Tipo de Contenido -->
+                            <div class="form-group-products">
+                                <label for="category">Tipo de Contenido *</label>
+                                <select id="category" name="category" required>
+                                    <option value="">Seleccione</option>
+                                    <option value="course" <%=product.category==='course' ? 'selected' : '' %>>Curso
+                                    </option>
+                                    <option value="music" <%=product.category==='music' ? 'selected' : '' %>>Música
+                                    </option>
+                                    <option value="ebook" <%=product.category==='ebook' ? 'selected' : '' %>>E-book
+                                    </option>
                                 </select>
                             </div>
-                        </div>
 
-                        <div class="form-group-products">
-                            <label for="instructor">Instructor</label>
-                            <input type="text" id="instructor" name="instructor" placeholder="Nombre del instructor" value="Carlos Martínez">
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="requirements">Requisitos Previos</label>
-                            <textarea id="requirements" name="requirements" placeholder="Conocimientos o herramientas necesarias">Conocimientos básicos de HTML y CSS. Computadora con conexión a internet. Editor de código (se recomienda VS Code).</textarea>
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="syllabus">Temario/Contenido del Curso</label>
-                            <textarea id="syllabus" name="syllabus" placeholder="Módulos, lecciones, temas que se cubrirán">Módulo 1: Fundamentos de JavaScript
-Módulo 2: DOM y Eventos
-Módulo 3: ES6+ y Funciones Avanzadas
-Módulo 4: Async/Await y APIs
-Módulo 5: Frameworks y Librerías
-Módulo 6: Proyectos Prácticos</textarea>
-                        </div>
-                    </div>
-
-                    <!-- Campos específicos para MÚSICA -->
-                    <div id="musicFields" class="content-specific-fields" style="display: none;">
-                        <div class="form-row-products">
-                            <div class="form-group-products">
-                                <label for="artist">Artista</label>
-                                <input type="text" id="artist" name="artist" placeholder="Nombre del artista">
-                            </div>
-                            <div class="form-group-products">
-                                <label for="album">Álbum</label>
-                                <input type="text" id="album" name="album" placeholder="Nombre del álbum">
-                            </div>
-                        </div>
-
-                        <div class="form-row-products">
-                            <div class="form-group-products">
-                                <label for="genre">Género Musical</label>
-                                <select id="genre" name="genre">
-                                    <option value="">Seleccione el género</option>
-                                    <option value="rock">Rock</option>
-                                    <option value="pop">Pop</option>
-                                    <option value="jazz">Jazz</option>
-                                    <option value="classical">Clásica</option>
-                                    <option value="electronic">Electrónica</option>
-                                    <option value="reggae">Reggae</option>
-                                    <option value="blues">Blues</option>
-                                    <option value="country">Country</option>
-                                    <option value="hip-hop">Hip-Hop</option>
-                                    <option value="latin">Latina</option>
-                                </select>
-                            </div>
-                            <div class="form-group-products">
-                                <label for="duration_music">Duración (mm:ss)</label>
-                                <input type="text" id="duration_music" name="duration_music" placeholder="03:45" pattern="[0-9]{1,2}:[0-9]{2}">
-                            </div>
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="lyrics">Letra (opcional)</label>
-                            <textarea id="lyrics" name="lyrics" placeholder="Letra de la canción"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Campos específicos para E-BOOKS -->
-                    <div id="ebookFields" class="content-specific-fields" style="display: none;">
-                        <div class="form-row-products">
-                            <div class="form-group-products">
-                                <label for="author">Autor</label>
-                                <input type="text" id="author" name="author" placeholder="Nombre del autor">
-                            </div>
-                            <div class="form-group-products">
-                                <label for="pages">Número de Páginas</label>
-                                <input type="number" id="pages" name="pages" min="1" placeholder="Ej: 250">
-                            </div>
-                        </div>
-
-                        <div class="form-row-products">
-                            <div class="form-group-products">
-                                <label for="language">Idioma</label>
-                                <select id="language" name="language">
-                                    <option value="">Seleccione el idioma</option>
-                                    <option value="spanish">Español</option>
-                                    <option value="english">Inglés</option>
-                                    <option value="portuguese">Portugués</option>
-                                    <option value="french">Francés</option>
-                                    <option value="italian">Italiano</option>
-                                    <option value="german">Alemán</option>
-                                </select>
-                            </div>
-                            <div class="form-group-products">
-                                <label for="format">Formato</label>
-                                <select id="format" name="format">
-                                    <option value="">Seleccione el formato</option>
-                                    <option value="pdf">PDF</option>
-                                    <option value="epub">EPUB</option>
-                                    <option value="mobi">MOBI</option>
-                                    <option value="kindle">Kindle</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="isbn">ISBN (opcional)</label>
-                            <input type="text" id="isbn" name="isbn" placeholder="978-3-16-148410-0">
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="excerpt">Extracto/Vista Previa</label>
-                            <textarea id="excerpt" name="excerpt" placeholder="Primeras páginas o resumen del contenido"></textarea>
-                        </div>
-                    </div>
-
-                    <!-- Tags/Etiquetas -->
-                    <div class="form-group-products">
-                        <label for="tags">Etiquetas (separadas por comas)</label>
-                        <input type="text" id="tags" name="tags" placeholder="programación, javascript, web development" value="javascript, programación, desarrollo web, frontend, ES6">
-                        <small style="color: #666; font-size: 0.8rem;">Ayuda a los usuarios a encontrar tu contenido</small>
-                    </div>
-
-                    <!-- Estado y Disponibilidad -->
-                    <div class="form-row-products">
-                        <div class="form-group-products">
-                            <label for="status">Estado del Contenido</label>
-                            <select id="status" name="status">
-                                <option value="active" selected>Activo</option>
-                                <option value="inactive">Inactivo</option>
-                                <option value="draft">Borrador</option>
-                                <option value="coming_soon">Próximamente</option>
-                            </select>
-                        </div>
-
-                        <div class="form-group-products">
-                            <label for="featured">Contenido Destacado</label>
-                            <select id="featured" name="featured">
-                                <option value="0">No</option>
-                                <option value="1" selected>Sí</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <!-- Imágenes/Portada Actuales -->
-                    <div class="form-group-products">
-                        <label>Imágenes Actuales</label>
-                        <div class="current-images-container" style="margin-bottom: 15px;">
-                            <div class="current-image-item" style="display: inline-block; margin: 5px; position: relative;">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 150 100'%3E%3Crect width='150' height='100' fill='%234f46e5'/%3E%3Ctext x='75' y='50' text-anchor='middle' dy='0.3em' font-family='sans-serif' font-size='12' fill='white'%3EPortada Actual%3C/text%3E%3C/svg%3E" 
-                                     alt="Imagen actual" style="width: 150px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;">
-                                <button type="button" onclick="removeCurrentImage(this)" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;">×</button>
-                            </div>
-                            <div class="current-image-item" style="display: inline-block; margin: 5px; position: relative;">
-                                <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='150' height='100' viewBox='0 0 150 100'%3E%3Crect width='150' height='100' fill='%237c3aed'/%3E%3Ctext x='75' y='50' text-anchor='middle' dy='0.3em' font-family='sans-serif' font-size='12' fill='white'%3EGalería 1%3C/text%3E%3C/svg%3E" 
-                                     alt="Imagen de galería" style="width: 150px; height: 100px; object-fit: cover; border-radius: 8px; border: 2px solid #ddd;">
-                                <button type="button" onclick="removeCurrentImage(this)" style="position: absolute; top: -5px; right: -5px; background: #ef4444; color: white; border: none; border-radius: 50%; width: 25px; height: 25px; cursor: pointer; font-size: 12px;">×</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Imágenes/Portada -->
-                    <div class="form-group-products">
-                        <label for="images">Agregar Nuevas Imágenes</label>
-                        <div class="image-upload-container" onclick="document.getElementById('images').click()">
-                            <input type="file" id="images" name="images[]" multiple accept="image/*" style="display: none;">
-                            <p>🖼️ Haga clic aquí para agregar más imágenes</p>
-                            <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                                Formatos soportados: JPG, PNG. Recomendado: 800x600px para portada.
-                            </p>
-                        </div>
-                        <div class="image-preview" id="imagePreview"></div>
-                    </div>
-
-                    <!-- Archivo Digital Actual -->
-                    <div class="form-group-products" id="currentFileSection">
-                        <label>Archivo Digital Actual</label>
-                        <div class="current-file-info" style="background: #f8f9fa; padding: 15px; border-radius: 8px; border: 1px solid #dee2e6;">
-                            <div style="display: flex; align-items: center; gap: 10px;">
-                                <span style="font-size: 24px;">📁</span>
-                                <div>
-                                    <strong>curso_javascript_moderno.zip</strong>
-                                    <br>
-                                    <small style="color: #666;">Tamaño: 245 MB | Subido: 15/03/2024</small>
+                            <!-- Precio y Descuento -->
+                            <div class="form-row-products">
+                                <div class="form-group">
+                                    <label for="price">Precio (PYG) *</label>
+                                    <input type="number" id="price" name="price" required step="0.01"
+                                        value="<%= product.price || 0 %>">
                                 </div>
-                                <button type="button" onclick="removeCurrentFile()" style="margin-left: auto; background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Eliminar</button>
+                                <div class="form-group">
+                                    <label for="discount">Descuento</label>
+                                    <input type="number" id="discount" name="discount" min="0"
+                                        value="<%= product.discount || 0 %>">
+                                </div>
                             </div>
-                        </div>
+
+                            <!-- Estado y Oferta -->
+                            <div class="form-row-products">
+                                <div class="form-group-products">
+                                    <label for="stock">Estado del Contenido</label>
+                                    <select id="stock" name="stock">
+                                        <option value="1" <%=product.stock ? 'selected' : '' %>>Activo</option>
+                                        <option value="0" <%=!product.stock ? 'selected' : '' %>>Inactivo</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group-products">
+                                    <label for="featured">¿Está en Oferta?</label>
+                                    <select id="featured" name="featured">
+                                        <option value="0" <%=!product.sale ? 'selected' : '' %>>No</option>
+                                        <option value="1" <%=product.sale ? 'selected' : '' %>>Sí</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Autor y Etiquetas -->
+                            <div class="form-group-products">
+                                <label for="author">Author *</label>
+                                <input type="text" id="author" name="author" required
+                                    value="<%= product.author || '' %>">
+                                <label for="tags">Etiquetas (separadas por comas)</label>
+                                <input type="text" id="tags" name="tags"
+                                    value="<%= product.tags ? product.tags.join(', ') : '' %>">
+                                <small>Ayuda a los usuarios a encontrar tu contenido</small>
+                            </div>
+
+                            <!-- Formato -->
+                            <div class="form-group-products">
+                                <label for="format">Formato del Contenido</label>
+                                <select id="format" name="format">
+                                    <option value="video" <%=product.format==='video' ? 'selected' : '' %>>Video
+                                    </option>
+                                    <option value="audio" <%=product.format==='audio' ? 'selected' : '' %>>Audio
+                                    </option>
+                                    <option value="document" <%=product.format==='document' ? 'selected' : '' %>
+                                        >Documento</option>
+                                    <option value="ebook" <%=product.format==='ebook' ? 'selected' : '' %>>E-book
+                                    </option>
+                                </select>
+                            </div>
+
+                            <div class="form-group-products">
+                                <label for="newImages">Agregar nuevas imágenes</label>
+                                <input type="file" name="newImages" id="newImages" multiple accept="image/*">
+                            </div>
+
+                            <div class="form-group-products">
+                                <label>Imágenes actuales</label>
+                                <div class="current-images">
+                                    <% if (Array.isArray(product.images)) { %>
+                                        <% product.images.forEach((image, index)=> { %>
+                                            <div class="thumbnail-wrapper">
+                                                <img src="/images/products/<%= image %>" alt="Imagen <%= index + 1 %>"
+                                                    style="width: 80px; height: 80px;">
+                                                <label>
+                                                    <input type="checkbox" name="deleteImages"
+                                                        value="/images/products/<%= image %>">
+                                                    Eliminar
+                                                </label>
+                                            </div>
+                                            <% }) %>
+                                                <% } %>
+                                </div>
+                            </div>
+
+
+                            <input type="hidden" name="updatedAt" value="<%= new Date().toISOString() %>">
+
+                            <div class="form-actions-products">
+                                <button type="submit" class="btn btn-primary-products">💾 Actualizar Contenido</button>
+                                <a href="/products" class="btn btn-secondary-products">📋 Ver Lista</a>
+                            </div>
+                        </form>
                     </div>
+                </div>
+            </section>
 
-                    <!-- Archivo Digital (para cursos y e-books) -->
-                    <div class="form-group-products" id="fileUploadSection">
-                        <label for="digitalFile">Reemplazar Archivo Digital</label>
-                        <div class="image-upload-container" onclick="document.getElementById('digitalFile').click()">
-                            <input type="file" id="digitalFile" name="digitalFile" accept=".pdf,.zip,.mp4,.mp3,.epub,.mobi" style="display: none;">
-                            <p>📁 Haga clic aquí para seleccionar un nuevo archivo</p>
-                            <p style="font-size: 0.8rem; color: #666; margin-top: 5px;">
-                                Formatos: PDF, ZIP, MP4, MP3, EPUB, MOBI. Máximo 500MB.
-                            </p>
-                        </div>
-                        <div id="filePreview"></div>
-                    </div>
+            <% include ../partials/footer.ejs %>
+    </body>
 
-                    <!-- Información de Auditoría -->
-                    <div class="form-group-products" style="background: #f8f9fa; padding: 15px; border-radius: 8px; margin: 20px 0;">
-                        <h4 style="margin-bottom: 10px; color: #495057;">📊 Información del Contenido</h4>
-                        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; font-size: 0.9rem;">
-                            <div>
-                                <strong>Creado:</strong><br>
-                                <span style="color: #666;">15 de Marzo, 2024</span>
-                            </div>
-                            <div>
-                                <strong>Última modificación:</strong><br>
-                                <span style="color: #666;">2 de Abril, 2024</span>
-                            </div>
-                            <div>
-                                <strong>Ventas totales:</strong><br>
-                                <span style="color: #28a745; font-weight: bold;">127 unidades</span>
-                            </div>
-                            <div>
-                                <strong>Ingresos generados:</strong><br>
-                                <span style="color: #28a745; font-weight: bold;">$11,432.73 USD</span>
-                            </div>
-                            <div>
-                                <strong>Valoración promedio:</strong><br>
-                                <span style="color: #ffc107;">⭐⭐⭐⭐⭐</span> <span style="color: #666;">(4.8/5)</span>
-                            </div>
-                            <div>
-                                <strong>Total de reseñas:</strong><br>
-                                <span style="color: #666;">89 reseñas</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Botones de Acción -->
-                    <div class="form-actions-products">
-                        <button type="submit" class="btn btn-primary-products">💾 Actualizar</button>
-                        <button type="button" class="btn btn-danger-products" onclick="deleteContent()" style="background: #dc3545; border-color: #dc3545;">🗑️ Eliminar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </section>
-    <script>
-        // Función para alternar campos según tipo de contenido
-        function toggleContentFields() {
-            const contentType = document.getElementById('contentType').value;
-            document.getElementById('courseFields').style.display = contentType === 'course' ? 'block' : 'none';
-            document.getElementById('musicFields').style.display = contentType === 'music' ? 'block' : 'none';
-            document.getElementById('ebookFields').style.display = contentType === 'ebook' ? 'block' : 'none';
-            document.getElementById('fileUploadSection').style.display = (contentType === 'course' || contentType === 'ebook') ? 'block' : 'none';
-            document.getElementById('currentFileSection').style.display = (contentType === 'course' || contentType === 'ebook') ? 'block' : 'none';
-        }
-
-        // Función para eliminar imagen actual
-        function removeCurrentImage(button) {
-            button.parentElement.remove();
-        }
-
-        // Función para eliminar archivo actual
-        function removeCurrentFile() {
-            document.getElementById('currentFileSection').innerHTML = '<p style="color: #666;">Archivo eliminado.</p>';
-        }
-
-        // Función de vista previa
-        function previewContent() {
-            alert("Vista previa del contenido aún no implementada.");
-        }
-
-        // Función de duplicar contenido
-        function duplicateContent() {
-            alert("Funcionalidad de duplicar aún no implementada.");
-        }
-
-        // Función de eliminar contenido
-        function deleteContent() {
-            if (confirm("¿Estás seguro de que deseas eliminar este contenido? Esta acción no se puede deshacer.")) {
-                alert("Contenido eliminado.");
-                window.location.href = '/products'; // Redirigir a la lista de productos
-            }
-        }
-        // Inicializar campos según tipo de contenido seleccionado
-        document.addEventListener('DOMContentLoaded', () => {
-            toggleContentFields();
-        });
-    </script>
-
-    <!-- Footer -->
-    <% include ../partials/footer.ejs %>
-
-</body>
 </html>

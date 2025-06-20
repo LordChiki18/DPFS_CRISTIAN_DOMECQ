@@ -6,7 +6,6 @@
         <!-- Header -->
         <%- include('../partials/header.ejs') %>
 
-
             <!-- Product Section -->
             <section class="product-section">
                 <div class="container">
@@ -14,60 +13,116 @@
                         <!-- Product Images -->
                         <div class="product-images">
                             <div class="main-image">
-                                <div class="main-image-placeholder">📦</div>
+                                <% if (product.images && product.images.length > 0) { %>
+                                <img src="/images/products/<%= product.images[0] %>" alt="<%= product.title %>"
+                                     id="mainImage">
+                                <% } else { %>
+                                    <img src="/images/default.png" alt="No image available" id="mainImage">
+                                    <% } %>
                             </div>
-                            <div class="thumbnail-container">
-                                <div class="nav-arrow">‹</div>
-                                <div class="thumbnails">
-                                    <div class="thumbnail active">
-                                        <div class="thumbnail-placeholder">📦</div>
-                                    </div>
-                                    <div class="thumbnail">
-                                        <div class="thumbnail-placeholder">📦</div>
-                                    </div>
-                                    <div class="thumbnail">
-                                        <div class="thumbnail-placeholder">📦</div>
-                                    </div>
-                                </div>
-                                <div class="nav-arrow">›</div>
+                            <div class="thumbnails">
+                                <% if (product.images) { %>
+                                    <% product.images.forEach(image=> { %>
+                                        <div class="thumbnail">
+                                            <img src="/images/products/<%= image %>" alt="<%= product.title %>">
+                                        </div>
+                                        <% }) %>
+                                            <% } %>
                             </div>
                         </div>
 
                         <!-- Product Info -->
                         <div class="product-info">
-                            <h1 class="product-name">Product Name</h1>
+                            <h1 class="product-name">
+                                <%= product.title %>
+                            </h1>
                             <p class="product-description">
-                                Lorem ipsum dolor sit amet et detectus accommodare his consul copiosae legendos at vix
-                                ad putent delectus delicata usu. Vidit dissentiet eos cu eum an brute copiosae
-                                hendrerit.
-                                Eos erant prompta ex, est ea modo dignissim, vel at impetus iracundia comprehensam.
+                                <%= product.description %>
                             </p>
 
                             <div class="quantity-section">
-                                <span class="quantity-label">Quantity:</span>
-                                <div class="quantity-controls">
-                                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-                                    <input type="text" class="quantity-input" value="1" id="quantity" readonly>
-                                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
-                                </div>
+                                <% if (product.discount && product.discountType==='percentage' ) { %>
+                                    <span style="text-decoration: line-through; color: #888;">
+                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                            }).format(product.oldPrice) %>
+                                    </span>
+                                    <span style="color: #e60000; font-weight: bold;">
+                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                            }).format(product.price) %>
+                                            <span style="color: green;">(-<%= product.discount %>%)</span>
+
+                                    </span>
+                                    <% } else { %>
+                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                            }).format(product.price) %>
+                                            <% } %>
+                                                <span class="quantity-label">Quantity:</span>
+                                                <div class="quantity-controls">
+                                                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
+                                                    <input type="text" class="quantity-input" value="1" id="quantity"
+                                                        readonly>
+                                                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
+                                                </div>
+                                                <button class="add-to-cart-btn" onclick="addToCart()">
+                                                    <span>Add to Cart</span>
+
+                                                </button>
                             </div>
 
-                            <button class="add-to-cart-btn" onclick="addToCart()">
-                                <span>Add to Cart</span>
-                                <span>🛒</span>
-                            </button>
+
 
                             <div class="product-meta">
-                                <p><span>Category:</span> Lorem Ipsum | <span class="in-stock">In stock</span></p>
+                                <p>
+                                    <span>Category:</span>
+                                    <a href="/products?category=<%= product.category %>"><%= product.category %></a> |
+                                        <span>Format:</span>
+                                        <%= product.format %> |
+                                            <span>Author:</span>
+                                            <%= product.author %>
+                                                <br>
+                                                <span>Tags:</span>
+                                                <%= product.tags %> |
+                                                    <span class="stock-quantity">
+                                                        <% if (product.stock===true) { %>
+                                                            In Stock
+                                                            <% } else { %>
+                                                                Out of Stock
+                                                                <% } %>
+                                                    </span>
+                                </p>
                             </div>
                         </div>
                     </div>
                 </div>
             </section>
-
             <!-- Footer -->
             <%- include('../partials/footer.ejs') %>
 
     </body>
+
+    <style>
+        /* Override existing styles to make image bigger */
+
+    </style>
+
+    <script>
+        // Esperar a que el DOM esté listo
+        document.addEventListener('DOMContentLoaded', () => {
+            const thumbnails = document.querySelectorAll('.thumbnail img');
+            const mainImage = document.getElementById('mainImage');
+
+            thumbnails.forEach(thumbnail => {
+                thumbnail.addEventListener('click', () => {
+                    // Cambiar src de imagen principal
+                    mainImage.src = thumbnail.src;
+
+                    // Marcar como activa la miniatura seleccionada
+                    document.querySelectorAll('.thumbnail').forEach(t => t.classList.remove('active'));
+                    thumbnail.parentElement.classList.add('active');
+                });
+            });
+        });
+    </script>
+
 
 </html>

@@ -3,6 +3,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var upload = require('./middlewares/uploadMiddleware.js');
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -16,13 +17,23 @@ app.set('view engine', 'ejs');
 
 app.use(logger('dev'));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.post('/upload', upload.single('productImage'), (req, res) => {
+  const imageUrl = `/images/products/${req.file.filename}`;
+  // Guardar imageUrl en BD o devolverlo al cliente
+  res.json({ imageUrl });
+});
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
-app.use('/products/', productsRouter);
+app.use('/products', productsRouter);
+
+
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
