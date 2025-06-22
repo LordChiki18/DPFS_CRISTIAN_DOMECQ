@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es">
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <%- include('../partials/header.ejs') %>
+
+            <main class="container my-5">
+                <section class="form-section-products">
+                    <div class="container">
+                        <div class="form-container-products">
+                            <% if (users && users.length> 0) { %>
+
+                                <!-- Tabla con espaciado mejorado -->
+                                <table class="table table-striped table-bordered spaced-table">
+                                    <thead class="table-dark">
+                                        <tr>
+                                            <th style="text-align: center;">Perfil</th>
+                                            <th style="text-align: center;">Nombre</th>
+                                            <th style="text-align: center;">Categoría</th>
+                                            <th style="text-align: center;">Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% users.forEach(user=> { %>
+                                            <tr>
+                                                <td style="width: 100px; text-align: center;">
+                                                    <!-- Corrección del src de la imagen -->
+                                                    <img src="/images/users/<%= user.profile_picture ? user.profile_picture : 'default.png' %>"
+                                                        alt="<%= user.first_name %>" class="profile-img">
+                                                </td>
+
+                                                <td style="text-align: center;">
+                                                    <strong>
+                                                        <%= user.first_name + ' ' + user.last_name %>
+                                                    </strong>
+                                                </td>
+
+                                                <td style="text-align: center;">
+                                                    <span class="badge bg-primary rounded-pill">
+                                                        <%= user.category %>
+                                                    </span>
+                                                </td>
+
+                                                <td style="text-align: center;">
+                                                    <div class="d-flex justify-content-center align-items-center gap-2">
+                                                        <a href="/users/profile/<%= user.id %>"
+                                                            class="btn btn-info btn-sm">
+                                                            <i class="fa fa-eye cart-icon"></i>
+                                                        </a>
+                                                        <a href="/users/edit/<%= user.id %>"
+                                                            class="btn btn-warning btn-sm">
+                                                            <i class="fa fa-edit cart-icon"></i> 
+                                                        </a>
+                                                        <a href="/users/<%= user.id %>/delete"
+                                                            class="btn btn-danger btn-sm"
+                                                            onclick="return confirm('¿Estás seguro de eliminar este usuario?');">
+                                                            <i class="fa fa-trash cart-icon"></i> 
+                                                        </a>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <% }) %>
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </section>
+                <% } else { %>
+                    <div class="text-center">
+                        <div class="alert alert-info" role="alert">
+                            <i class="fa fa-info-circle fa-2x mb-3"></i>
+                            <h4>No hay usuarios disponibles</h4>
+                            <p class="mb-0">Aún no se han registrado usuarios en el sistema.</p>
+                        </div>
+                    </div>
+                    <% } %>
+            </main>
+
+            <%- include('../partials/footer.ejs') %>
+    </body>
+
+</html>

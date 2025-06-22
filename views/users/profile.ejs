@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="es">
+
+
+<%- include('../partials/head.ejs') %>
+
+    <body>
+        <%- include('../partials/header.ejs') %>`
+            <br>
+            <div class="container_profile">
+                <!-- Header Section -->
+                <div class="header_profile">
+                    <div class="status-badge status-<%= user.status %>">
+                        <i class="fas fa-circle"></i>
+                        <%= user.status %>
+                    </div>
+
+                    <img src="/images/users/<%= user.profile_picture ? user.profile_picture : 'default.png' %>"
+                        alt="Foto de perfil" class="profile-image">
+
+
+                    <h1 class="user-name">
+                        <%= user.first_name %>
+                            <%= user.last_name %>
+                    </h1>
+                    <div class="user-category">
+                        <i class="fas fa-user-shield"></i>
+                        <%= user.category %>
+                    </div>
+                </div>
+
+                <!-- Content Section -->
+                <div class="content">
+                    <div class="info-grid">
+                        <!-- Información Personal -->
+                        <div class="info-card">
+                            <h3><i class="fas fa-user"></i> Información Personal</h3>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-user"></i> Nombre
+                                </span>
+                                <span class="info-value">
+                                    <%= user.first_name %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-user"></i> Apellido
+                                </span>
+                                <span class="info-value">
+                                    <%= user.last_name %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-envelope"></i> Email
+                                </span>
+                                <span class="info-value">
+                                    <%= user.email %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-birthday-cake"></i> Fecha de Nacimiento
+                                </span>
+                                <span class="info-value">
+                                    <% const birthdateString=user.birthdate + 'T12:00:00' ; const birthdate=new
+                                        Date(birthdateString); %>
+                                        <%= birthdate.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
+                                            year: 'numeric' }) %>
+
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-venus-mars"></i> Género
+                                </span>
+                                <span class="info-value">
+                                    <%= user.gender %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-phone"></i> Teléfono
+                                </span>
+                                <span class="info-value">
+                                    <%= user.phone %>
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Información de Cuenta -->
+                        <div class="info-card">
+                            <h3><i class="fas fa-cog"></i> Información de Cuenta</h3>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-hashtag"></i> ID de Usuario
+                                </span>
+                                <span class="info-value">#<%= user.id %></span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-hashtag"></i> Categoria
+                                </span>
+                                <span class="info-value">
+                                    <%= user.category %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-calendar-plus"></i> Fecha de Registro
+                                </span>
+                                <span class="info-value">
+                                    <% const createdAt=new Date(user.created_at); %>
+                                        <%= createdAt.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
+                                            year: 'numeric' }) %>
+
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-calendar-check"></i> Última Actualización
+                                </span>
+                                <span class="info-value">
+                                    <% const updatedAt=new Date(user.updated_at); %>
+                                        <%= updatedAt.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
+                                            year: 'numeric' }) %>
+                                </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="info-label">
+                                    <i class="fas fa-traffic-light"></i> Estado
+                                </span>
+                                <span class="info-value">
+                                    <span class="status-badge status-<%= user.status %>"
+                                        style="position: static; padding: 4px 12px; font-size: 0.7em;">
+                                        <%= user.status %>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Notice -->
+                    <% if (user.agreePrivacy) { %>
+                        <div class="privacy-notice">
+                            <i class="fas fa-shield-alt"></i>
+                            <h4>Privacidad Protegida</h4>
+                            <p>Este usuario ha aceptado los términos de privacidad y sus datos están protegidos conforme
+                                a nuestras políticas.</p>
+                        </div>
+                        <% } %>
+
+                            <!-- Action Buttons -->
+                            <div class="actions">
+                                <a href="/users/edit/<%= user.id %>" class="btn_profile btn-primary_profile">
+                                    <i class="fas fa-edit"></i> Editar Perfil
+                                </a>
+                                <a href="/" class="btn_profile btn-secondary_profile">
+                                    <i class="fas fa-arrow-left"></i> Home
+                                </a>
+                                <a href="/users/change-password" class="btn_profile btn-secondary_profile">
+                                    <i class="fas fa-key"></i> cambiar contraseña
+                                </a>
+                                <% if (user.category==='Admin' ) { %>
+                                    <a href="/products/admin" class="btn_profile btn-secondary_profile">
+                                        <i class="fas fa-tools"></i> Panel Admin
+                                    </a>
+                                    <% } %>
+                            </div>
+                            <br>
+                </div>
+            </div>
+
+            <script>
+                // Función para calcular edad
+                function calculateAge(birthdate) {
+                    const today = new Date();
+                    const birth = new Date(birthdate);
+                    let age = today.getFullYear() - birth.getFullYear();
+                    const monthDiff = today.getMonth() - birth.getMonth();
+
+                    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birth.getDate())) {
+                        age--;
+                    }
+
+                    return age;
+                }
+
+                // Mostrar edad si existe fecha de nacimiento
+                document.addEventListener('DOMContentLoaded', function () {
+                    const birthdateElement = document.querySelector('.info-value');
+                    if (birthdateElement && '<%= user.birthdate %>') {
+                        const age = calculateAge('<%= user.birthdate %>');
+                        birthdateElement.innerHTML += ` (${age} años)`;
+                    }
+                });
+
+                // Animación de entrada
+                document.addEventListener('DOMContentLoaded', function () {
+                    const container = document.querySelector('.container');
+                    container.style.opacity = '0';
+                    container.style.transform = 'translateY(30px)';
+
+                    setTimeout(() => {
+                        container.style.transition = 'all 0.6s ease';
+                        container.style.opacity = '1';
+                        container.style.transform = 'translateY(0)';
+                    }, 100);
+                });
+            </script>
+            <% include ../partials/footer %>
+
+    </body>
+
+</html>

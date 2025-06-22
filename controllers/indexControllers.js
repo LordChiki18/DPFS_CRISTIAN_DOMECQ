@@ -32,6 +32,8 @@ let indexController = {
         return res.render('index', {
             title: 'Home',
             products: products,
+            user: req.session.user || null,
+            isAuthenticated: req.session.user ? true : false,
         });
     },
 }

@@ -5,10 +5,19 @@
             <nav class="nav-menu">
                 <a href="/">Home</a>
                 <a href="/products">Products</a>
+                <% if (user && user.category==='Admin' ) { %>
+                    <a href="/products/admin">Admin Producto</a>
+                    <a href="/users/admin">Admin Usuario</a>
+                    <% } %>
             </nav>
             <div class="search-cart">
-                <input type="text" class="search-box" placeholder="Search...">
-                <div class="cart-icon"><i class="fa-solid fa-magnifying-glass"></i></div>
+                <form action="/products" method="GET" class="d-flex">
+                    <input type="text" name="q" class="search-box" placeholder="Buscar productos...">
+                    <button type="submit" class="cart-icon btn btn-link">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+                    </button>
+                </form>
+
 
                 <div class="cart-icon">
                     <a href="/products/cart">
@@ -16,10 +25,17 @@
                     </a>
                 </div>
                 <div class="cart-icon">
-                    <a href="#profile">
+                    <a href="/users/profile">
                         <i class="fa-solid fa-user cart-icon"></i>
                     </a>
                 </div>
+                <% if (user) { %>
+                    <div class="cart-icon">
+                        <a href="/users/logout">
+                            <i class="fa-solid fa-right-from-bracket cart-icon"></i>
+                        </a>
+                    </div>
+                    <% } %>
             </div>
         </div>
     </div>

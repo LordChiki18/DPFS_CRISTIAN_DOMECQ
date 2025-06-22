@@ -10,16 +10,25 @@
             <!-- Hero Section -->
             <section class="hero">
                 <div class="container">
-                    <h1>Hero heading of moderate length goes here</h1>
+                    <% if (user) { %>
+                        <h1>Welcome back, <%= user.first_name %> <%= user. last_name %>!</h1>
+                        <% } else { %>
+                            <h1>Welcome to Our Store</h1>
+                            <% } %>
                     <div class="hero-buttons">
-                        <a href="users/register">
-                            <button class="btn btn-primary">
-                                Register</button>
-                        </a>
-                        <a href="/users/login">
-                            <button class="btn btn-secondary">
-                                Log In</button>
-                        </a>
+                        <% if (user) { %>
+                            <a href="/products" class="btn btn-primary">Shop Now</a>
+                            <a href="/users/profile" class="btn btn-secondary">My Profile</a>
+                            <% } else { %>
+                                <a href="users/register">
+                                    <button class="btn btn-primary">
+                                        Register</button>
+                                </a>
+                                <a href="/users/login">
+                                    <button class="btn btn-secondary">
+                                        Log In</button>
+                                </a>
+                                <% } %>
                     </div>
                 </div>
             </section>
@@ -35,7 +44,7 @@
                                 <div class="product-card">
                                     <div class="product-image">
                                         <div class="image-placeholder"> <img
-                                                src="<%= product.images?.[0] || '/images/default.png' %>"
+                                                src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
                                                 alt="<%= product.title %>"></div>
                                         <% if (products.discount) { %>
                                             <span class="product-badge sale">SALE</span>
@@ -85,7 +94,7 @@
                             <div class="product-card">
                                 <div class="product-image">
                                     <div class="image-placeholder"> <img
-                                            src="<%= product.images?.[0] || '/images/default.png' %>"
+                                            src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
                                             alt="<%= product.title %>"></div>
                                     <% if (products.discount) { %>
                                         <span class="product-badge sale">SALE</span>
@@ -133,7 +142,7 @@
                             <div class="product-card">
                                 <div class="product-image">
                                     <div class="image-placeholder"> <img
-                                            src="<%= product.images?.[0] || '/images/default.png' %>"
+                                            src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
                                             alt="<%= product.title %>"></div>
                                     <% if (products.discount) { %>
                                         <span class="product-badge sale">SALE</span>
@@ -177,4 +186,5 @@
             <!-- Footer -->
             <%- include('partials/footer.ejs') %>
     </body>
+
 </html>

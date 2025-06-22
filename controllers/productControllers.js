@@ -21,6 +21,11 @@ const saveProducts = (products) => {
 
 let productController = {
     // Renderizado de vistas
+    adminList: (req, res) => {
+        const products = loadProducts();
+        res.render('products/adminProductList', { products });
+    },
+
     productList: (req, res) => {
         const page = parseInt(req.query.page) || 1;
         const clear = req.query.clear;
@@ -76,6 +81,21 @@ let productController = {
             }
         });
 
+        const query = req.query.q || '';
+        const searchTerm = query.toLowerCase().trim();
+
+        if (searchTerm) {
+            products = products.filter(product => {
+                const titleMatch = product.title?.toLowerCase().includes(searchTerm);
+                const descriptionMatch = product.description?.toLowerCase().includes(searchTerm);
+                const authorMatch = product.author?.toLowerCase().includes(searchTerm);
+                const categoryMatch = product.category?.toLowerCase().includes(searchTerm);
+                const tagsMatch = product.tags?.some(tag => tag.toLowerCase().includes(searchTerm));
+                return titleMatch || descriptionMatch || authorMatch || categoryMatch || tagsMatch;
+            });
+        }
+
+
 
         const start = (page - 1) * limit;
         const end = start + limit;
@@ -90,7 +110,9 @@ let productController = {
             totalPages: totalPages,
             selectedCategory: category,
             selectedPrice: price,
-            selectedSort: sort
+            selectedSort: sort,
+            user: req.session.user,
+            searchQuery: query,
         });
     },
 
@@ -124,9 +146,11 @@ let productController = {
     productCart: (req, res) => {
         return res.render('products/productCart', { title: 'Carrito de Compras' });
     },
+
     productCreate: (req, res) => {
         res.render('products/productCreate', { title: 'Administración de Productos' });
     },
+
     productStore: (req, res) => {
         // Log each expected field
         const expectedFields = [
@@ -188,6 +212,7 @@ let productController = {
 
         res.redirect('/products');
     },
+
     productEdit: (req, res) => {
         const id = req.params.id;
 
@@ -203,64 +228,65 @@ let productController = {
             product: product
         });
     },
-updateProduct: (req, res) => {
-    const id = req.params.id;
+    updateProduct: (req, res) => {
+        const id = req.params.id;
 
-    console.log('📂 Archivos recibidos:', req.files);
+        console.log('📂 Archivos recibidos:', req.files);
 
-    if (!req.body || Object.keys(req.body).length === 0) {
-        console.log('❌ REQUEST BODY IS EMPTY');
-        return res.status(400).json({ error: 'No data received in update' });
-    }
+        if (!req.body || Object.keys(req.body).length === 0) {
+            console.log('❌ REQUEST BODY IS EMPTY');
+            return res.status(400).json({ error: 'No data received in update' });
+        }
 
-    const allProducts = loadProducts();
-    const index = allProducts.findIndex(p => String(p.id) === String(id));
+        const allProducts = loadProducts();
+        const index = allProducts.findIndex(p => String(p.id) === String(id));
 
-    if (index === -1) {
-        return res.status(404).send('Producto no encontrado');
-    }
+        if (index === -1) {
+            return res.status(404).send('Producto no encontrado');
+        }
 
-    const product = allProducts[index];
+        const product = allProducts[index];
 
-    // --- 1. ELIMINAR IMÁGENES MARCADAS ---
-    let toDelete = req.body.deleteImages || [];
-    if (typeof toDelete === 'string') toDelete = [toDelete];
+        // --- 1. ELIMINAR IMÁGENES MARCADAS ---
+        let toDelete = req.body.deleteImages || [];
+        if (typeof toDelete === 'string') toDelete = [toDelete];
 
-    product.images = product.images.filter(img => !toDelete.includes(`/images/products/${img}`));
+        product.images = product.images.filter(img => !toDelete.includes(`/images/products/${img}`));
 
-    toDelete.forEach(imgPath => {
-        const filePath = path.join(__dirname, '../public', imgPath);
-        if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
-    });
+        toDelete.forEach(imgPath => {
+            const filePath = path.join(__dirname, '../public', imgPath);
+            if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
+        });
 
-    // --- 2. AGREGAR NUEVAS IMÁGENES SUBIDAS ---
-    const newImages = req.files?.map(file => file.filename) || [];
-    product.images.push(...newImages);
+        // --- 2. AGREGAR NUEVAS IMÁGENES SUBIDAS ---
+        const newImages = req.files?.map(file => file.filename) || [];
+        product.images.push(...newImages);
 
-    // --- 3. ACTUALIZAR OTROS DATOS ---
-    const updatedProduct = {
-        ...product,
-        title: req.body.title,
-        description: req.body.description,
-        category: req.body.category,
-        price: parseFloat(req.body.price),
-        discount: parseFloat(req.body.discount) || 0,
-        stock: req.body.stock === "1",
-        sale: req.body.featured === "1",
-        author: req.body.author,
-        tags: req.body.tags ? req.body.tags.split(',').map(t => t.trim()) : [],
-        format: req.body.format,
-        images: product.images, // Mantener las imágenes actualizadas
-        createdAt: product.createdAt, // Mantener la fecha original
-        updatedAt: new Date().toISOString()
-    };
+        // --- 3. ACTUALIZAR OTROS DATOS ---
+        const updatedProduct = {
+            ...product,
+            title: req.body.title,
+            description: req.body.description,
+            category: req.body.category,
+            price: parseFloat(req.body.price),
+            discount: parseFloat(req.body.discount) || 0,
+            stock: req.body.stock === "1",
+            sale: req.body.featured === "1",
+            author: req.body.author,
+            tags: req.body.tags ? req.body.tags.split(',').map(t => t.trim()) : [],
+            format: req.body.format,
+            images: product.images, // Mantener las imágenes actualizadas
+            createdAt: product.createdAt, // Mantener la fecha original
+            updatedAt: new Date().toISOString()
+        };
 
-    allProducts[index] = updatedProduct;
-    saveProducts(allProducts);
+        allProducts[index] = updatedProduct;
+        saveProducts(allProducts);
 
-    console.log('✅ Producto actualizado correctamente');
-    res.redirect('/products');
-},
+        console.log('✅ Producto actualizado correctamente');
+        res.redirect('/products');
+    },
+
     deleteProduct: (req, res) => {
         const id = req.params.id;
         const allProducts = loadProducts();
@@ -274,7 +300,7 @@ updateProduct: (req, res) => {
         saveProducts(allProducts);
 
         return res.redirect('/products');
-    }
+    },
 };
 
 module.exports = productController;

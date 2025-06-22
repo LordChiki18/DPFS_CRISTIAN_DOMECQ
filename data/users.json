@@ -1,20 +1,5 @@
 [
   {
-    "id": 1,
-    "first_name": "Ivor",
-    "last_name": "Beckles",
-    "email": "ibeckles0@hao123.com",
-    "password": "$2a$04$aT.AMpLQqDRWSMeo5A0U9u13FmF2fRARrlt3MqW1JdIwwHZV5.u76",
-    "category": "Admin",
-    "gender": "Female",
-    "status": "active",
-    "created_at": "2023-10-01T12:00:00Z",
-    "updated_at": "2023-10-01T12:00:00Z",
-    "birthdate": "1990-05-15",
-    "phone": "+1234567890",
-    "agreePrivacy": true
-  },
-  {
     "id": 2,
     "first_name": "Wilbur",
     "last_name": "Thake",
@@ -72,29 +57,34 @@
   },
   {
     "id": 6,
-    "first_name": "Chiki",
-    "last_name": "domecq",
+    "first_name": "cHIKUIASDF",
+    "last_name": "DSFGSD",
     "email": "correo@correo.com",
-    "password": "12345678",
-    "category": "User",
-    "status": "active",
-    "birthdate": null,
-    "phone": null,
-    "createdAt": "2025-06-16T15:21:19.068Z",
-    "updatedAt": "2025-06-16T15:21:19.068Z"
-  },
-  {
-    "id": 7,
-    "first_name": "Cristian",
-    "last_name": "Domecq Smitmans",
-    "email": "domecq31@gmail.com",
-    "password": "aaa123",
+    "password": "$2b$10$FZuj5.PdohaPjcM/0.9nV.OYnLU8we77VrXB2KAPL6dFq4iGt0NuO",
     "category": "User",
     "gender": "Male",
     "status": "active",
     "birthdate": null,
     "phone": null,
-    "createdAt": "2025-06-16T15:25:05.755Z",
-    "updatedAt": "2025-06-16T15:25:05.756Z"
+    "profile_picture": null,
+    "agreePrivacy": true,
+    "created_at": "2025-06-20T17:24:21.982Z",
+    "updated_at": "2025-06-20T17:24:21.983Z"
+  },
+  {
+    "id": 7,
+    "first_name": "Cris",
+    "last_name": "Ariel",
+    "email": "correo1@correo.com",
+    "password": "$2b$10$kz1Xt6qULUtHNttIuh9Fc.OTPaNDrp.VoKWyCNvlKPChwhEZ.O7De",
+    "category": "Admin",
+    "gender": "Male",
+    "status": "active",
+    "birthdate": "2002-03-27",
+    "phone": "0971503352",
+    "profile_picture": "1750448931320-profile.png",
+    "agreePrivacy": true,
+    "created_at": "2025-06-20T17:28:52.737Z",
+    "updated_at": "2025-06-22T16:33:18.859Z"
   }
 ]
