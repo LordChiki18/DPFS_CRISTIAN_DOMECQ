@@ -17,7 +17,7 @@ router.get('/change-password', isAuthenticated, (req, res) => {
   res.render('users/changePassword');
 });
 router.post('/changePassword', isAuthenticated, userController.changePassword);
-router.get('/profile', isAuthenticated, isProfileOwner, userController.profile);
+router.get('/profile', isAuthenticated, userController.profile);
 router.get('/profile/:id', isAuthenticated, isProfileOwner, userController.profileView);
 router.get('/edit/:id', isAuthenticated, isProfileOwner, userController.profileEdit);
 router.put('/edit/:id', upload.single('profile_picture'), userController.userProfile);

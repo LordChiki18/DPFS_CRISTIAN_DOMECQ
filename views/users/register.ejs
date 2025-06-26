@@ -11,24 +11,24 @@
       <!-- Create Account Section -->
       <section class="form-section">
         <div class="form-container">
-          <h2 class="form-title">Create a New Account</h2>
+          <h2 class="form-title">Crear Nueva Cuenta</h2>
           <% if (typeof error !=='undefined' ) { %>
             <div class="alert alert-danger">
               <%= error %>
             </div>
             <% } %>
-              <p class="required-notice">* indicates a required field</p>
+              <p class="required-notice">* Indica que es obligatorio</p>
               <br>
 
               <form action="/users/store" method="POST" class="form">
                 <div class="form-group">
-                  <label for="first_name">First Name<span class="required">*</span></label>
+                  <label for="first_name">Nombre<span class="required">*</span></label>
                   <input type="text" id="first_name" name="first_name" value="<%= oldData?.first_name || '' %>"
                     required>
                 </div>
 
                 <div class="form-group">
-                  <label for="last_name">Last Name<span class="required">*</span></label>
+                  <label for="last_name">Apellido<span class="required">*</span></label>
                   <input type="text" id="last_name" name="last_name" value="<%= oldData?.last_name || '' %>" required>
                 </div>
 
@@ -38,37 +38,36 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="confirmEmail">Confirm Email<span class="required">*</span></label>
+                  <label for="confirmEmail">Confirmar Email<span class="required">*</span></label>
                   <input type="email" id="confirmEmail" name="confirmEmail" value="<%= oldData?.confirmEmail || '' %>"
                     required>
                 </div>
 
                 <div class="form-group">
-                  <label for="password">Password<span class="required">*</span></label>
+                  <label for="password">Contraseña<span class="required">*</span></label>
                   <input type="password" id="password" name="password" value="<%= oldData?.password || '' %>" required>
                 </div>
 
                 <div class="form-group">
-                  <label for="confirmPassword">Confirm Password<span class="required">*</span></label>
+                  <label for="confirmPassword">Confirmar Contraseña<span class="required">*</span></label>
                   <input type="password" id="confirmPassword" name="confirmPassword"
                     value="<%= oldData?.confirmPassword || '' %>" required>
                 </div>
 
                 <div class="form-group">
-                  <label for="gender">Gender<span class="required">*</span></label>
+                  <label for="gender">Genero<span class="required">*</span></label>
                   <select id="gender" name="gender" class="gender-select" required>
-                    <option value="">-- Select --</option>
-                    <option value="Female">Female</option>
-                    <option value="Male">Male</option>
-                    <option value="Other">Other</option>
-                    <option value="Not specified">Prefer not to say</option>
+                    <option value="">-- Selecciona --</option>
+                    <option value="Mujer">Mujer</option>
+                    <option value="Hombre">Hombre</option>
+                    <option value="Otro">Otro</option>
                   </select>
                 </div>
 
 
                 <div class="checkbox-group">
                   <input type="checkbox" id="agreeprivacy" name="agreeprivacy" required>
-                  <label for="agreeprivacy">Agree Privacy</label>
+                  <label for="agreeprivacy">Aceptar Terminos de Privacidad</label>
                 </div>
 
                 <input type="hidden" id="createdAt" name="createdAt" value="<%= new Date().toISOString() %>">
@@ -76,7 +75,7 @@
                 <input type="hidden" id="role" name="role" value="user">
                 <input type="hidden" id="status" name="status" value="active">
                 <br>
-                <button type="submit" class="btn btn-register">Register</button>
+                <button type="submit" class="btn btn-register">Registrarse</button>
               </form>
         </div>
       </section>

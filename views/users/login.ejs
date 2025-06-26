@@ -11,7 +11,7 @@
       <!-- Sign In Section -->
       <section class="form-section">
         <div class="form-container">
-          <h2 class="form-title">Sign In</h2>
+          <h2 class="form-title">Iniciar Sesion</h2>
           <% if (error) { %>
             <div class="error-message">
               <p style="color: red;">
@@ -30,21 +30,22 @@
                 </div>
 
                 <div class="form-group">
-                  <label for="password">Password</label>
+                  <label for="password">Contraseña</label>
                   <input type="password" id="password" name="password" placeholder="Password">
                 </div>
 
-                <button type="submit" class="btn btn-register">Sign In</button>
+                <button type="submit" class="btn btn-register">Iniciar Sesion</button>
               </form>
-
+              <br>
               <div class="forgot-password">
-                <a href="/users/forgot-password">I forgot my password</a>
+                <a href="/users/forgot-password">Olvide mi Contraseña</a>
               </div>
 
               <div class="new-customer">
-                <p>I am a new customer and want to create an account.</p>
-                <button type="button" class="btn btn-secondary" onclick="window.location.href='#create-account'">Create
-                  Account</button>
+                <p>Eres nuevo y quieres crear tu cuenta?.</p>
+                <a href="/users/register"> 
+                <button type="button" class="btn btn-secondary">Crear Cuenta</button>
+                </a>
               </div>
         </div>
       </section>

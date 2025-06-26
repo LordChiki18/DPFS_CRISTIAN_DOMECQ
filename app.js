@@ -8,6 +8,7 @@ var session = require('express-session');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products.js');
+var cartRouter = require('./routes/cart.js')
 
 var app = express();
 
@@ -42,7 +43,7 @@ app.use((req, res, next) => {
     next();
 });
 
-
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.post('/upload', upload.single('productImage'), (req, res) => {
   const imageUrl = `/images/products/${req.file.filename}`;
   // Guardar imageUrl en BD o devolverlo al cliente
@@ -52,8 +53,7 @@ app.post('/upload', upload.single('productImage'), (req, res) => {
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
-
-
+app.use('/cart', cartRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

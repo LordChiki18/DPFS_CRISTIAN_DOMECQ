@@ -11,25 +11,26 @@
             <section class="hero">
                 <div class="container">
                     <% if (user) { %>
-                        <h1>Welcome back, <%= user.first_name %> <%= user. last_name %>!</h1>
+                        <h1>Welcome back, <%= user.first_name %>
+                                <%= user. last_name %>!</h1>
                         <% } else { %>
-                            <h1>Welcome to Our Store</h1>
+                            <h1>Bienvenido a nuestra tienda</h1>
                             <% } %>
-                    <div class="hero-buttons">
-                        <% if (user) { %>
-                            <a href="/products" class="btn btn-primary">Shop Now</a>
-                            <a href="/users/profile" class="btn btn-secondary">My Profile</a>
-                            <% } else { %>
-                                <a href="users/register">
-                                    <button class="btn btn-primary">
-                                        Register</button>
-                                </a>
-                                <a href="/users/login">
-                                    <button class="btn btn-secondary">
-                                        Log In</button>
-                                </a>
-                                <% } %>
-                    </div>
+                                <div class="hero-buttons">
+                                    <% if (user) { %>
+                                        <a href="/products" class="btn btn-primary">Comprar</a>
+                                        <a href="/users/profile" class="btn btn-secondary">Mi perfil</a>
+                                        <% } else { %>
+                                            <a href="users/register">
+                                                <button class="btn btn-primary">
+                                                    Registrarse</button>
+                                            </a>
+                                            <a href="/users/login">
+                                                <button class="btn btn-secondary">
+                                                    Iniciar Sesion</button>
+                                            </a>
+                                            <% } %>
+                                </div>
                 </div>
             </section>
 
@@ -43,10 +44,11 @@
 
                                 <div class="product-card">
                                     <div class="product-image">
-                                        <div class="image-placeholder"> <img
-                                                src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
-                                                alt="<%= product.title %>"></div>
-                                        <% if (products.discount) { %>
+                                        <div class="image-placeholder">
+                                            <img src="/images/products/<%= product.images?.[0] || 'default.png' %>"
+                                                alt="<%= product.title %>">
+                                        </div>
+                                        <% if (product.discount && product.discount> 0) { %>
                                             <span class="product-badge sale">SALE</span>
                                             <% } %>
                                     </div>
@@ -57,23 +59,31 @@
                                         <%= product.description %>
                                     </p>
                                     <div class="product-footer">
+
                                         <div class="price-section">
-                                            <% if(product.oldPrice !=product.price) { %>
-                                                <div class="price-old">₲<%= product.oldPrice.toLocaleString() %>
+                                            <% if (product.oldPrice> product.price && product.oldPrice > 0) { %>
+                                                <div class="price-old">
+                                                    <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                        currency: 'PYG' }).format(product.oldPrice) %>
                                                 </div>
                                                 <% } %>
-                                                    <div class="price">₲<%= product.price.toLocaleString() %>
+                                                    <div class="price">
+                                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                            currency: 'PYG' }).format(product.price) %>
                                                     </div>
-                                                    <% if (product.discount) { %>
+                                                    <% if (product.discount && product.discount> 0) { %>
                                                         <div class="price-discount">
                                                             <%= product.discount %>% OFF
                                                         </div>
                                                         <% } %>
                                         </div>
-                                        <button class="btn-buy">
-                                            <i class="fa-solid fa-cart-shopping"></i>
-                                            Add to Cart
-                                        </button>
+                                        <form action="/cart/add/<%= product.id %>" method="POST"
+                                            style="display:inline;">
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn-buy">
+                                                <i class="fa-solid fa-cart-shopping"></i> Agregar al carrito
+                                            </button>
+                                        </form>
                                     </div>
                                 </div>
                                 <% }) %>
@@ -81,7 +91,7 @@
 
                     </div>
                     <div class="show-more">
-                        <a href="products?category=ebook">Show more</a>
+                        <a href="products?category=ebook">Ver mas</a>
                     </div>
                 </div>
             </section>
@@ -91,45 +101,56 @@
                     <h2 class="section-title">Courses</h2>
                     <div class="product-grid">
                         <% products.filter(product=> product.category === 'course').slice(0,3).forEach(product => { %>
-                            <div class="product-card">
-                                <div class="product-image">
-                                    <div class="image-placeholder"> <img
-                                            src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
-                                            alt="<%= product.title %>"></div>
-                                    <% if (products.discount) { %>
-                                        <span class="product-badge sale">SALE</span>
-                                        <% } %>
-                                </div>
-                                <h3>
-                                    <%= product.title %>
-                                </h3>
-                                <p class="product-description">
-                                    <%= product.description %>
-                                </p>
-                                <div class="product-footer">
-                                    <div class="price-section">
-                                        <% if(product.oldPrice !=product.price) { %>
-                                            <div class="price-old">₲<%= product.oldPrice.toLocaleString() %>
-                                            </div>
+                            <a href="/products/<%= product.id %>">
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <div class="image-placeholder">
+                                            <img src="/images/products/<%= product.images?.[0] || 'default.png' %>"
+                                                alt="<%= product.title %>">
+                                        </div>
+                                        <% if (product.discount && product.discount> 0) { %>
+                                            <span class="product-badge sale">SALE</span>
                                             <% } %>
-                                                <div class="price">₲<%= product.price.toLocaleString() %>
-                                                </div>
-                                                <% if (product.discount) { %>
-                                                    <div class="price-discount">
-                                                        <%= product.discount %>% OFF
-                                                    </div>
-                                                    <% } %>
                                     </div>
-                                    <button class="btn-buy">
-                                        <i class="fa-solid fa-cart-shopping"></i>
-                                        Add to Cart
-                                    </button>
+                                    <h3>
+                                        <%= product.title %>
+                                    </h3>
+                                    <p class="product-description">
+                                        <%= product.description %>
+                                    </p>
+                                    <div class="product-footer">
+
+                                        <div class="price-section">
+                                            <% if (product.oldPrice> product.price && product.discount > 0) { %>
+                                                <div class="price-old">
+                                                    <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                        currency: 'PYG' }).format(product.oldPrice) %>
+                                                </div>
+                                                <% } %>
+                                                    <div class="price">
+                                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                            currency: 'PYG' }).format(product.price) %>
+                                                    </div>
+                                                    <% if (product.discount && product.discount> 0) { %>
+                                                        <div class="price-discount">
+                                                            <%= product.discount %>% OFF
+                                                        </div>
+                                                        <% } %>
+                                        </div>
+                                        <form action="/cart/add/<%= product.id %>" method="POST"
+                                            style="display:inline;">
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn-buy">
+                                                <i class="fa-solid fa-cart-shopping"></i> Agregar al carrito
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                            <% }) %>
+                                <% }) %>
+                            </a>
                     </div>
                     <div class="show-more">
-                        <a href="/products?category=course">Show more</a>
+                        <a href="/products?category=course">Ver mas</a>
                     </div>
                 </div>
             </section>
@@ -139,45 +160,56 @@
                     <h2 class="section-title">Music</h2>
                     <div class="product-grid">
                         <% products.filter(product=> product.category === 'music').slice(0,3).forEach(product => { %>
-                            <div class="product-card">
-                                <div class="product-image">
-                                    <div class="image-placeholder"> <img
-                                            src="/images/products/<%= product.images?.[0] || '/images/default.png' %>"
-                                            alt="<%= product.title %>"></div>
-                                    <% if (products.discount) { %>
-                                        <span class="product-badge sale">SALE</span>
-                                        <% } %>
-                                </div>
-                                <h3>
-                                    <%= product.title %>
-                                </h3>
-                                <p class="product-description">
-                                    <%= product.description %>
-                                </p>
-                                <div class="product-footer">
-                                    <div class="price-section">
-                                        <% if(product.oldPrice !=product.price) { %>
-                                            <div class="price-old">₲<%= product.oldPrice.toLocaleString() %>
-                                            </div>
+                            <a href="/products/<%= product.id %>">
+                                <div class="product-card">
+                                    <div class="product-image">
+                                        <div class="image-placeholder">
+                                            <img src="/images/products/<%= product.images?.[0] || 'default.png' %>"
+                                                alt="<%= product.title %>">
+                                        </div>
+                                        <% if (product.discount && product.discount> 0) { %>
+                                            <span class="product-badge sale">SALE</span>
                                             <% } %>
-                                                <div class="price">₲<%= product.price.toLocaleString() %>
-                                                </div>
-                                                <% if (product.discount) { %>
-                                                    <div class="price-discount">
-                                                        <%= product.discount %>% OFF
-                                                    </div>
-                                                    <% } %>
                                     </div>
-                                    <button class="btn-buy">
-                                        <i class="fa-solid fa-cart-shopping"></i>
-                                        Add to Cart
-                                    </button>
+                                    <h3>
+                                        <%= product.title %>
+                                    </h3>
+                                    <p class="product-description">
+                                        <%= product.description %>
+                                    </p>
+                                    <div class="product-footer">
+
+                                        <div class="price-section">
+                                            <% if (product.oldPrice> product.price && product.oldPrice > 0) { %>
+                                                <div class="price-old">
+                                                    <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                        currency: 'PYG' }).format(product.oldPrice) %>
+                                                </div>
+                                                <% } %>
+                                                    <div class="price">
+                                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' ,
+                                                            currency: 'PYG' }).format(product.price) %>
+                                                    </div>
+                                                    <% if (product.discount && product.discount> 0) { %>
+                                                        <div class="price-discount">
+                                                            <%= product.discount %>% OFF
+                                                        </div>
+                                                        <% } %>
+                                        </div>
+                                        <form action="/cart/add/<%= product.id %>" method="POST"
+                                            style="display:inline;">
+                                            <input type="hidden" name="quantity" value="1" />
+                                            <button type="submit" class="btn-buy">
+                                                <i class="fa-solid fa-cart-shopping"></i> Agregar al carrito
+                                            </button>
+                                        </form>
+                                    </div>
                                 </div>
-                            </div>
-                            <% }) %>
+                                <% }) %>
+                            </a>
                     </div>
                     <div class="show-more">
-                        <a href="/products?category=music">Show more</a>
+                        <a href="/products?category=music">Ver mas</a>
                     </div>
                 </div>
             </section>

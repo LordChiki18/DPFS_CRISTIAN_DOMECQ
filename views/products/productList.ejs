@@ -78,10 +78,13 @@
               <div class="product-card">
                 <div class="product-image">
                   <div class="image-placeholder">
-                    <% if (product.discount)  { %>
+                    <% if (product.sale) { %>
                       <span class="product-badge sale">SALE</span>
                       <% } %>
-                      <img src="<%= product.images && product.images.length > 0 ? '/images/products/'+product.images[0] : '/images/default.png' %>" alt="<%= product.title %>" class="product-img">
+                        <img
+                          src="<%= product.images && product.images.length > 0 ? '/images/products/' + product.images[0] : '/images/default.png' %>"
+                          alt="<%= product.title %>">
+
                   </div>
                   <% if(product.badge) { %>
                     <div class="product-badge <%= product.badge %>">
@@ -101,22 +104,31 @@
                 </p>
                 <div class="product-footer">
                   <div class="price-section">
-                    <% if(product.oldPrice != product.price && product.oldPrice > 0) { %>
-                      <div class="price-old">₲<%= product.oldPrice.toLocaleString() %>
+                    <% if (product.oldPrice> product.price && product.discount > 0) { %>
+                      <div class="price-old">
+                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                          }).format(product.oldPrice) %>
                       </div>
                       <% } %>
-                        <div class="price">₲<%= product.price.toLocaleString() %>
+
+                        <div class="price">
+                          <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                            }).format(product.price) %>
                         </div>
-                        <% if (product.discount) { %>
+
+                        <% if (product.discount> 0) { %>
                           <div class="price-discount">
                             <%= product.discount %>% OFF
                           </div>
                           <% } %>
                   </div>
-                  <button class="btn-buy">
-                    <i class="fa-solid fa-cart-shopping"></i>
-                    Add to Cart
-                  </button>
+
+                  <form action="/cart/add/<%= product.id %>" method="POST" style="display:inline;">
+                    <input type="hidden" name="quantity" value="1" />
+                    <button type="submit" class="btn-buy">
+                      <i class="fa-solid fa-cart-shopping"></i> Add to Cart
+                    </button>
+                  </form>
                 </div>
               </div>
               <% }) %>
@@ -131,7 +143,7 @@
               <a href="?page=<%= currentPage - 1%>" class="pagination-btn">« Previous</a>
               <% } %>
                 <% for (let i=1; i <=totalPages; i++) { %>
-                  <a href="?page=<%= i %>&category=<% selectedCategory %>&price=<%= selectedPrice %>"
+                  <a href="?page=<%= i %>&category=<%= selectedCategory %>&price=<%= selectedPrice %>&sort=<%= selectedSort %>&q=<%= searchQuery %>"
                     class="pagination-btn <%= i === currentPage ? 'active' : '' %>">
                     <%= i %>
                   </a>
@@ -147,6 +159,6 @@
       <!-- Footer -->
 
   </body>
-      <%- include('../partials/footer.ejs') %>
+  <%- include('../partials/footer.ejs') %>
 
 </html>

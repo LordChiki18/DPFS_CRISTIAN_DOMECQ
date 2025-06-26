@@ -6,7 +6,6 @@ const isAdmin = require('../middlewares/isAdmin');
 
 router.get('/', productController.productList);
 router.get('/admin' , isAdmin, productController.adminList);
-router.get('/cart', productController.productCart);
 router.get('/create', isAdmin, productController.productCreate);
 router.post('/store', isAdmin, upload.array('images', 5),productController.productStore);
 router.get('/:id', productController.productDetail);

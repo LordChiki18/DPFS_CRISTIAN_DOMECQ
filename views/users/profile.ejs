@@ -64,11 +64,7 @@
                                     <i class="fas fa-birthday-cake"></i> Fecha de Nacimiento
                                 </span>
                                 <span class="info-value">
-                                    <% const birthdateString=user.birthdate + 'T12:00:00' ; const birthdate=new
-                                        Date(birthdateString); %>
-                                        <%= birthdate.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
-                                            year: 'numeric' }) %>
-
+                                    <%= user.birthdateFormatted || 'No especificado' %>
                                 </span>
                             </div>
                             <div class="info-item">
@@ -106,27 +102,30 @@
                                     <%= user.category %>
                                 </span>
                             </div>
+                            <!-- Fecha de Registro -->
                             <div class="info-item">
                                 <span class="info-label">
                                     <i class="fas fa-calendar-plus"></i> Fecha de Registro
                                 </span>
                                 <span class="info-value">
-                                    <% const createdAt=new Date(user.created_at); %>
-                                        <%= createdAt.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
-                                            year: 'numeric' }) %>
-
+                                    <%= user.createdAtFormatted %>
                                 </span>
+
                             </div>
+
+
+
+                            <!-- Última Actualización -->
                             <div class="info-item">
                                 <span class="info-label">
                                     <i class="fas fa-calendar-check"></i> Última Actualización
                                 </span>
                                 <span class="info-value">
-                                    <% const updatedAt=new Date(user.updated_at); %>
-                                        <%= updatedAt.toLocaleDateString('es-ES', { day: 'numeric' , month: 'long' ,
-                                            year: 'numeric' }) %>
+                                    <%= user.updatedAtFormatted %>
                                 </span>
+
                             </div>
+
                             <div class="info-item">
                                 <span class="info-label">
                                     <i class="fas fa-traffic-light"></i> Estado

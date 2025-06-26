@@ -1,9 +1,13 @@
 const fs = require('fs');
 const path = require('path');
 const bcrypt = require('bcrypt');
+const { User } = require('../models');
+const { Op } = require('sequelize');
+
 
 // Carga los productos desde el archivo JSON
 const dataPath = path.join(__dirname, '../data/users.json');
+
 // Función para cargar los usuarios desde el archivo JSON
 const loadUsers = () => {
     try {
@@ -23,15 +27,22 @@ const saveUsers = (users) => {
         console.error('Error al guardar users.json:', error);
     }
 };
+
+
 // Controlador de usuarios
 let userController = {
     // Función para mostrar la lista de usuarios para el administrador
-    adminList: (req, res) => {
-        const users = loadUsers();
-        return res.render('users/adminUserList', {
-            title: 'Lista de Usuarios',
-            users: users
+    adminList: async (req, res) => {
+        const users = await User.findAll({
+            order: [['id', 'DESC']],
+            attributes: ['id', 'first_name', 'last_name', 'email', 'category', 'status',
+                'birthdate', 'phone', 'profile_picture', 'created_at', 'updated_at'],
         });
+        return res.render('users/adminUserList', {
+            title: 'Administrar Usuarios',
+            users
+        });
+
     },
     // Función para mostrar el formulario de registro
     register: (req, res) => {
@@ -49,27 +60,27 @@ let userController = {
                 first_name,
                 last_name,
                 email,
+                confirmEmail,
                 password,
+                confirmPassword,
                 gender,
                 category,
                 status,
                 birthdate,
                 phone,
-                agreeprivacy,
-                createdAt,
-                updatedAt
+                agreeprivacy
             } = req.body;
 
-            // Verificación de campos obligatorios
+            // Validaciones básicas
             if (!first_name || !last_name || !email || !password || !agreeprivacy) {
-                return res.status(400).json({
+                return res.status(400).render('users/register', {
+                    title: 'registro',
                     error: 'Faltan campos obligatorios',
-                    received_body: req.body
+                    oldData: req.body
                 });
             }
 
-            // Verificar que los emails coincidan
-            if (req.body.email !== req.body.confirmEmail) {
+            if (email !== confirmEmail) {
                 return res.render('users/register', {
                     title: 'registro',
                     error: 'Los correos no coinciden',
@@ -77,8 +88,7 @@ let userController = {
                 });
             }
 
-            // Verificar que las contraseñas coincidan
-            if (req.body.password !== req.body.confirmPassword) {
+            if (password !== confirmPassword) {
                 return res.render('users/register', {
                     title: 'registro',
                     error: 'Las contraseñas no coinciden',
@@ -86,7 +96,6 @@ let userController = {
                 });
             }
 
-            // Validar longitud mínima de contraseña
             if (password.length < 6) {
                 return res.render('users/register', {
                     title: 'registro',
@@ -95,10 +104,8 @@ let userController = {
                 });
             }
 
-            const users = loadUsers();
-
-            // Verificar si el email ya existe
-            const existingUser = users.find(user => user.email.toLowerCase() === email.toLowerCase());
+            // Validar si ya existe el usuario
+            const existingUser = await User.findOne({ where: { email: email.toLowerCase() } });
             if (existingUser) {
                 return res.render('users/register', {
                     title: 'registro',
@@ -107,12 +114,11 @@ let userController = {
                 });
             }
 
-            // Encriptar la contraseña
-            const saltRounds = 10;
-            const hashedPassword = await bcrypt.hash(password, saltRounds);
+            // Encriptar contraseña
+            const hashedPassword = await bcrypt.hash(password, 10);
 
-            const newUser = {
-                id: users.length ? users[users.length - 1].id + 1 : 1,
+            // Crear usuario
+            await User.create({
                 first_name,
                 last_name,
                 email: email.toLowerCase(),
@@ -122,27 +128,15 @@ let userController = {
                 status: status || 'active',
                 birthdate: birthdate || null,
                 phone: phone || null,
-                profile_picture: null,
-                agreePrivacy: agreeprivacy === 'on' || agreeprivacy === true,
-                created_at: createdAt || new Date().toISOString(),
-                updated_at: updatedAt || new Date().toISOString()
-            };
-
-            console.log('Nuevo usuario creado:', {
-                ...newUser,
-                password: '[PROTECTED]'
+                agreeprivacy: agreeprivacy === 'on' || agreeprivacy === true,
+                profile_picture: null
             });
 
-            users.push(newUser);
-            saveUsers(users);
-
-            // Opcional: Establecer mensaje de éxito en session
-            req.session && (req.session.successMessage = 'Usuario registrado exitosamente');
-
-            res.redirect('/users/login');
+            req.session.successMessage = 'Usuario registrado exitosamente';
+            return res.redirect('/users/login');
 
         } catch (error) {
-            console.error('Error al registrar usuario:', error);
+            console.error('❌ Error al registrar usuario:', error);
             return res.render('users/register', {
                 title: 'registro',
                 error: 'Error interno del servidor. Intenta nuevamente.',
@@ -162,10 +156,6 @@ let userController = {
         try {
             const { email, password } = req.body;
 
-            console.log('=== DEBUG LOGIN ===');
-            console.log('Email recibido:', email);
-            console.log('Session ID:', req.sessionID);
-
             if (!email || !password) {
                 return res.render('users/login', {
                     title: 'Login',
@@ -173,8 +163,8 @@ let userController = {
                 });
             }
 
-            const users = loadUsers();
-            const user = users.find(u => u.email.toLowerCase() === email.toLowerCase());
+            const user = await User.findOne({ where: { email } });
+
 
             if (!user) {
                 console.log('Usuario no encontrado');
@@ -235,11 +225,8 @@ let userController = {
                 console.log('Redireccionando...');
 
                 // Redireccionar según el rol
-                if (user.category === 'Admin') {
-                    res.redirect('/users/profile');
-                } else {
-                    res.redirect('/users/profile');
-                }
+                res.redirect(user.category === 'Admin' ? '/users/profile' : '/users/profile');
+
             });
 
         } catch (error) {
@@ -251,45 +238,45 @@ let userController = {
         }
     },
     // Función para mostrar el perfil del usuario
-    profile: (req, res) => {
-        console.log('=== DEBUG PROFILE ===');
-        console.log('Session ID:', req.sessionID);
-        console.log('Session completa:', req.session);
-        console.log('Session user:', req.session?.user);
-
-        // Verificar que la sesión existe
-        if (!req.session) {
-            console.log('No hay sesión');
+    profile: async (req, res) => {
+        if (!req.session?.user) {
             return res.redirect('/users/login');
         }
 
-        // Verificar que el usuario existe en la sesión
-        if (!req.session.user) {
-            console.log('No hay usuario en sesión');
+        const user = await User.findByPk(req.session.user.id);
+
+        if (!user) {
+            req.session.destroy();
             return res.redirect('/users/login');
         }
 
-        const users = loadUsers();
-        const fullUser = users.find(u => u.id === req.session.user.id);
-
-        if (!fullUser) {
-            console.log('Usuario no encontrado en archivo');
-            req.session.destroy(); // Limpiar sesión corrupta
-            return res.redirect('/users/login');
+        function formatDate(date) {
+            if (!date) return null;
+            return new Date(date).toLocaleDateString('es-ES', {
+                day: '2-digit',
+                month: '2-digit',
+                year: 'numeric'
+            });
         }
 
-        console.log('Mostrando perfil para:', fullUser.email);
+        const userData = {
+            ...user.toJSON(),
+            createdAtFormatted: formatDate(user.createdAt),   // <-- CAMBIO aquí
+            updatedAtFormatted: formatDate(user.updatedAt),   // <-- Y aquí
+            birthdateFormatted: formatDate(user.birthdate)
+        };
+
+        console.log('Datos del usuario:', userData);
 
         res.render('users/profile', {
             title: 'Perfil de Usuario',
-            user: fullUser
+            user: userData
         });
     },
     // Función para editar el perfil de un usuario
-    profileEdit: (req, res) => {
+    profileEdit: async (req, res) => {
         const id = req.params.id;
-        const allUsers = loadUsers();
-        const user = allUsers.find(u => String(u.id) === String(id));
+        const user = await User.findByPk(id);
 
         if (!user) {
             return res.status(404).send('Usuario no encontrado');
@@ -301,23 +288,15 @@ let userController = {
         });
     },
     // Función para editar el perfil de un usuario
-    userProfile: (req, res) => {
+    userProfile: async (req, res) => {
         const id = req.params.id;
 
-        // Validar que el usuario logueado solo acceda a su propio perfil
-        if (!req.session.user || String(req.session.user.id) !== String(id)) {
-            return res.status(403).send('No autorizado para editar este perfil');
-        }
 
+        const user = await User.findByPk(id);
 
-        const allUsers = loadUsers();
-        const index = allUsers.findIndex(u => String(u.id) === String(id));
-
-        if (index === -1) {
+        if (user === -1) {
             return res.status(404).send('Usuario no encontrado');
         }
-
-        const user = allUsers[index];
 
         if (req.file) {
             user.profile_picture = req.file.filename; // SOLO la imagen subida
@@ -333,8 +312,7 @@ let userController = {
         user.birthdate = req.body.birthdate || user.birthdate;
         user.updated_at = new Date().toISOString();
 
-        // Guardar cambios
-        saveUsers(allUsers);
+        await user.save();
 
         // Actualizar también la sesión si corresponde
         if (req.session?.user && req.session.user.id === user.id) {
@@ -352,10 +330,10 @@ let userController = {
 
     },
     // Función para ver el perfil de un usuario específico
-    profileView: (req, res) => {
+    profileView: async (req, res) => {
         const id = req.params.id;
-        const users = loadUsers(); // o como estés cargando usuarios
-        const user = users.find(u => u.id == id);
+
+        const user = await User.findByPk(id);
 
         if (!user) {
             return res.status(404).send('Usuario no encontrado');
@@ -385,8 +363,7 @@ let userController = {
                 return res.status(400).json({ error: 'La nueva contraseña debe tener al menos 6 caracteres' });
             }
 
-            const users = loadUsers();
-            const user = users.find(u => u.id === userId);
+            const user = await User.findByPk(userId);
 
             if (!user) {
                 return res.status(404).json({ error: 'Usuario no encontrado' });
@@ -406,7 +383,7 @@ let userController = {
             user.password = hashedNewPassword;
             user.updated_at = new Date().toISOString();
 
-            saveUsers(users);
+            await user.save();
 
             res.redirect('/users/login');
 
@@ -428,27 +405,27 @@ let userController = {
         });
     },
     // Función para eliminar un usuario
-    deleteUser: (req, res) => {
+    deleteUser: async (req, res) => {
         const id = req.params.id;
-        const allUsers = loadUsers();
-        const index = allUsers.findIndex(u => String(u.id) === String(id));
+        const user = await User.findByPk(id);
 
-        if (index === -1) {
+        if (user === -1) {
             return res.status(404).send('User no encontrado');
         }
 
-        allUsers.splice(index, 1);
-        saveUsers(allUsers);
+        await User.destroy({ where: { id } });
 
         return res.redirect('/users/admin');
     },
+    // Mostrar Formulario de olvidar contraseña
     forgotPasswordForm: (req, res) => {
         res.render('users/forgotPassword', { error: null });
     },
-    handleForgotPasswordForm: (req, res) => {
+    // Funcion para cambiar la contraseña (solo para el PROYECTO no IRL)
+    handleForgotPasswordForm: async (req, res) => {
         const { email } = req.body;
-        const users = loadUsers();
-        const user = users.find(u => u.email === email);
+
+        const user = await User.findOne({ where: { email } });
 
         if (!user) {
             return res.render('users/forgotPassword', { error: 'Correo no encontrado' });
@@ -456,13 +433,11 @@ let userController = {
 
         res.redirect(`/users/reset-password/${user.id}`);
     },
-
     // Formulario de nueva contraseña
     resetPasswordForm: (req, res) => {
         const { id } = req.params;
         res.render('users/resetPassword', { id, error: null });
     },
-
     // Procesar nueva contraseña
     resetPassword: async (req, res) => {
         const { id } = req.params;
@@ -480,8 +455,7 @@ let userController = {
             return res.render('users/resetPassword', { id, error: 'La contraseña debe tener al menos 6 caracteres' });
         }
 
-        const users = loadUsers();
-        const user = users.find(u => String(u.id) === String(id));
+        const user = await User.findByPk(id);
 
         if (!user) {
             return res.status(404).send('Usuario no encontrado');
@@ -489,7 +463,8 @@ let userController = {
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
-        saveUsers(users);
+        
+        await user.save()
 
         res.redirect('/users/login');
     }

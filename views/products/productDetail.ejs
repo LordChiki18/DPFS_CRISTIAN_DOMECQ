@@ -13,12 +13,12 @@
                         <!-- Product Images -->
                         <div class="product-images">
                             <div class="main-image">
-                                <% if (product.images && product.images.length > 0) { %>
-                                <img src="/images/products/<%= product.images[0] %>" alt="<%= product.title %>"
-                                     id="mainImage">
-                                <% } else { %>
-                                    <img src="/images/default.png" alt="No image available" id="mainImage">
-                                    <% } %>
+                                <% if (product.images && product.images.length> 0) { %>
+                                    <img src="/images/products/<%= product.images[0] %>" alt="<%= product.title %>"
+                                        id="mainImage">
+                                    <% } else { %>
+                                        <img src="/images/default.png" alt="No image available" id="mainImage">
+                                        <% } %>
                             </div>
                             <div class="thumbnails">
                                 <% if (product.images) { %>
@@ -40,55 +40,60 @@
                                 <%= product.description %>
                             </p>
 
-                            <div class="quantity-section">
-                                <% if (product.discount && product.discountType==='percentage' ) { %>
-                                    <span style="text-decoration: line-through; color: #888;">
-                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
-                                            }).format(product.oldPrice) %>
-                                    </span>
-                                    <span style="color: #e60000; font-weight: bold;">
-                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
-                                            }).format(product.price) %>
-                                            <span style="color: green;">(-<%= product.discount %>%)</span>
+                            <form action="/cart/add/<%= product.id %>" method="POST" id="addToCartForm">
+                                <div class="quantity-section">
+                                    <% if (product.discount && product.discount> 0 && product.discount_type ===
+                                        'percentage') { %>
+                                        <span style="text-decoration: line-through; color: #888;">
+                                            <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                                }).format(product.oldPrice) %>
+                                        </span>
+                                        <span style="color: #e60000; font-weight: bold;">
+                                            <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                                }).format(product.price) %>
+                                                <span style="color: green;">(-<%= product.discount %>%)</span>
+                                        </span>
+                                        <% } else { %>
+                                            <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
+                                                }).format(product.price) %>
+                                                <% } %>
 
-                                    </span>
-                                    <% } else { %>
-                                        <%= new Intl.NumberFormat('es-PY', { style: 'currency' , currency: 'PYG'
-                                            }).format(product.price) %>
-                                            <% } %>
-                                                <span class="quantity-label">Quantity:</span>
-                                                <div class="quantity-controls">
-                                                    <button class="quantity-btn" onclick="changeQuantity(-1)">-</button>
-                                                    <input type="text" class="quantity-input" value="1" id="quantity"
-                                                        readonly>
-                                                    <button class="quantity-btn" onclick="changeQuantity(1)">+</button>
-                                                </div>
-                                                <button class="add-to-cart-btn" onclick="addToCart()">
-                                                    <span>Add to Cart</span>
+                                                    <span class="quantity-label">Cantidad:</span>
+                                                    <div class="quantity-controls">
+                                                        <button type="button" class="quantity-btn"
+                                                            onclick="changeQuantity(-1)">−</button>
+                                                        <input type="text" name="quantity" class="quantity-input"
+                                                            value="1" id="quantity" readonly>
+                                                        <button type="button" class="quantity-btn"
+                                                            onclick="changeQuantity(1)">+</button>
+                                                    </div>
 
-                                                </button>
-                            </div>
-
-
+                                                    <button type="submit" class="add-to-cart-btn">
+                                                        <span>Añadir al carrito</span>
+                                                    </button>
+                                </div>
+                            </form>
 
                             <div class="product-meta">
                                 <p>
                                     <span>Category:</span>
-                                    <a href="/products?category=<%= product.category %>"><%= product.category %></a> |
-                                        <span>Format:</span>
-                                        <%= product.format %> |
-                                            <span>Author:</span>
-                                            <%= product.author %>
-                                                <br>
-                                                <span>Tags:</span>
-                                                <%= product.tags %> |
-                                                    <span class="stock-quantity">
-                                                        <% if (product.stock===true) { %>
-                                                            In Stock
-                                                            <% } else { %>
-                                                                Out of Stock
-                                                                <% } %>
-                                                    </span>
+                                    <a href="/products?category=<%= product.category %>">
+                                        <%= product.category %>
+                                    </a> |
+                                    <span>Format:</span>
+                                    <%= product.format %> |
+                                        <span>Author:</span>
+                                        <%= product.author %>
+                                            <br>
+                                            <span>Tags:</span>
+                                            <%= product.tags %> |
+                                                <span class="stock-quantity">
+                                                    <% if (product.stock===true) { %>
+                                                        In Stock
+                                                        <% } else { %>
+                                                            Out of Stock
+                                                            <% } %>
+                                                </span>
                                 </p>
                             </div>
                         </div>
@@ -117,6 +122,15 @@
                 });
             });
         });
+
+        function changeQuantity(amount) {
+            const input = document.getElementById('quantity');
+            let current = parseInt(input.value, 10);
+            current = isNaN(current) ? 1 : current;
+            current += amount;
+            if (current < 1) current = 1;
+            input.value = current;
+        }
     </script>
 
 
