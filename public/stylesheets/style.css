@@ -314,6 +314,13 @@ header {
     height: 80px;
 }
 
+.text-danger {
+  color: red;
+  font-size: 0.9em;
+  margin-top: 0.3rem;
+}
+
+
 .product-tags {
     padding: 0 1rem;
     color: #666;

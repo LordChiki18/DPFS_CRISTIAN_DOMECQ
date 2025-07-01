@@ -3,6 +3,7 @@ const path = require('path');
 const bcrypt = require('bcrypt');
 const { User } = require('../models');
 const { Op } = require('sequelize');
+const { validationResult } = require('express-validator');
 
 
 // Carga los productos desde el archivo JSON
@@ -28,7 +29,6 @@ const saveUsers = (users) => {
     }
 };
 
-
 // Controlador de usuarios
 let userController = {
     // Función para mostrar la lista de usuarios para el administrador
@@ -46,23 +46,38 @@ let userController = {
     },
     // Función para mostrar el formulario de registro
     register: (req, res) => {
-        return res.render('users/register',
-            {
-                title: 'registro',
-                error: null,
-                oldData: {}
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.render('users/register', {
+                errors: errors.mapped(),
+                oldData: req.body
             });
+        }
+        return res.render('users/register', {
+            title: 'registro',
+            error: null,
+            oldData: {}
+        });
     },
+
     // Función para registrar un nuevo usuario
     userRegister: async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.render('users/register', {
+                title: 'Registro',
+                errors: errors.mapped(),
+                oldData: req.body
+            });
+        }
+
         try {
             const {
                 first_name,
                 last_name,
                 email,
-                confirmEmail,
                 password,
-                confirmPassword,
                 gender,
                 category,
                 status,
@@ -70,49 +85,6 @@ let userController = {
                 phone,
                 agreeprivacy
             } = req.body;
-
-            // Validaciones básicas
-            if (!first_name || !last_name || !email || !password || !agreeprivacy) {
-                return res.status(400).render('users/register', {
-                    title: 'registro',
-                    error: 'Faltan campos obligatorios',
-                    oldData: req.body
-                });
-            }
-
-            if (email !== confirmEmail) {
-                return res.render('users/register', {
-                    title: 'registro',
-                    error: 'Los correos no coinciden',
-                    oldData: req.body
-                });
-            }
-
-            if (password !== confirmPassword) {
-                return res.render('users/register', {
-                    title: 'registro',
-                    error: 'Las contraseñas no coinciden',
-                    oldData: req.body
-                });
-            }
-
-            if (password.length < 6) {
-                return res.render('users/register', {
-                    title: 'registro',
-                    error: 'La contraseña debe tener al menos 6 caracteres',
-                    oldData: req.body
-                });
-            }
-
-            // Validar si ya existe el usuario
-            const existingUser = await User.findOne({ where: { email: email.toLowerCase() } });
-            if (existingUser) {
-                return res.render('users/register', {
-                    title: 'registro',
-                    error: 'El email ya está registrado',
-                    oldData: req.body
-                });
-            }
 
             // Encriptar contraseña
             const hashedPassword = await bcrypt.hash(password, 10);
@@ -144,60 +116,52 @@ let userController = {
             });
         }
     },
+
     // Función para mostrar el formulario de login
     login: (req, res) => {
         return res.render('users/login', {
             title: 'Login',
-            error: null
+            errors: {},
+            oldData: {}
         });
     },
     // Función para manejar el login de un usuario
     userLogin: async (req, res) => {
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.render('users/login', {
+                title: 'Login',
+                errors: 'Credenciales inválidas',
+                oldData: req.body
+            });
+        }
+
+        const { email, password } = req.body;
+
         try {
-            const { email, password } = req.body;
-
-            if (!email || !password) {
-                return res.render('users/login', {
-                    title: 'Login',
-                    error: 'Email y contraseña son obligatorios'
-                });
-            }
-
             const user = await User.findOne({ where: { email } });
 
-
-            if (!user) {
-                console.log('Usuario no encontrado');
+            if (!user || !(await bcrypt.compare(password, user.password))) {
                 return res.render('users/login', {
                     title: 'Login',
-                    error: 'Credenciales inválidas'
+                    errors: {
+                        email: { msg: 'Credenciales inválidas' }
+                    },
+                    oldData: req.body
                 });
             }
 
-            // Verificar contraseña con bcrypt
-            const passwordMatch = await bcrypt.compare(password, user.password);
-
-            if (!passwordMatch) {
-                console.log('Contraseña incorrecta');
-                return res.render('users/login', {
-                    title: 'Login',
-                    error: 'Credenciales inválidas'
-                });
-            }
-
-            // Verificar si el usuario está activo
             if (user.status !== 'active') {
-                console.log('Usuario inactivo');
                 return res.render('users/login', {
                     title: 'Login',
-                    error: 'Cuenta inactiva. Contacta al administrador.'
+                    errors: {
+                        email: { msg: 'Cuenta inactiva. Contacta al administrador.' }
+                    },
+                    oldData: req.body
                 });
             }
 
-            // Login exitoso - guardar en session
-            console.log('Login exitoso, guardando en session...');
-
-            // FORZAR la creación de la sesión
             req.session.user = {
                 id: user.id,
                 first_name: user.first_name,
@@ -206,34 +170,26 @@ let userController = {
                 category: user.category
             };
 
-            console.log('Session después del login:', req.session.user);
-
-            // Actualizar última conexión
             user.updated_at = new Date().toISOString();
 
-            // IMPORTANTE: Guardar la sesión antes de redireccionar
             req.session.save((err) => {
                 if (err) {
-                    console.error('Error al guardar sesión:', err);
                     return res.render('users/login', {
                         title: 'Login',
-                        error: 'Error al iniciar sesión'
+                        errors: { general: { msg: 'Error al iniciar sesión' } },
+                        oldData: req.body
                     });
                 }
 
-                console.log('Sesión guardada exitosamente');
-                console.log('Redireccionando...');
-
-                // Redireccionar según el rol
-                res.redirect(user.category === 'Admin' ? '/users/profile' : '/users/profile');
-
+                return res.redirect('/users/profile');
             });
 
         } catch (error) {
             console.error('Error en login:', error);
             return res.render('users/login', {
                 title: 'Login',
-                error: 'Error interno del servidor'
+                errors: { general: { msg: 'Error interno del servidor' } },
+                oldData: req.body
             });
         }
     },
@@ -463,7 +419,7 @@ let userController = {
 
         const hashedPassword = await bcrypt.hash(newPassword, 10);
         user.password = hashedPassword;
-        
+
         await user.save()
 
         res.redirect('/users/login');

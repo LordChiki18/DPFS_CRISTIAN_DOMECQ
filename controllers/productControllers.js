@@ -218,29 +218,26 @@ let productController = {
     },
     //Mostrar formulario para creacion de productos
     productCreate: (req, res) => {
-        res.render('products/productCreate', { title: 'Administración de Productos' });
+        res.render('products/productCreate', { title: 'Administración de Productos', errors: {}, oldData: {} });
     },
     //Funcion para crear productos
     productStore: async (req, res) => {
+        const { validationResult } = require('express-validator');
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            return res.render('products/productCreate', {
+                title: 'Administración de Productos',
+                errors: errors.mapped(),
+                oldData: req.body
+            });
+        }
+
         try {
             const {
                 title, description, category, price, author,
                 discount, stock, featured, tags, format, discountType
             } = req.body;
-
-            if (!title || !description || !category || !author || !price) {
-                return res.status(400).json({
-                    error: 'Missing required fields',
-                    received_body: req.body,
-                    missing_fields: {
-                        title: !title,
-                        description: !description,
-                        category: !category,
-                        author: !author,
-                        price: !price
-                    }
-                });
-            }
 
             const parsedTags = tags
                 ? tags.split(',').map(tag => tag.trim()).filter(Boolean)
@@ -251,8 +248,6 @@ let productController = {
                 : [];
 
             const originalPrice = parseFloat(price);
-
-            console.log(originalPrice)
             const discountValue = parseInt(discount) || 0;
             const type = discountType || 'percentage';
 
@@ -262,12 +257,11 @@ let productController = {
                 if (type === 'percentage') {
                     finalPrice = originalPrice * (1 - discountValue / 100);
                 } else if (type === 'fixed') {
-                    finalPrice = originalPrice - discountValue;
-                    if (finalPrice < 0) finalPrice = 0;
+                    finalPrice = Math.max(0, originalPrice - discountValue);
                 }
             }
 
-            const newProduct = await Product.create({
+            await Product.create({
                 title,
                 description,
                 category,
@@ -275,7 +269,7 @@ let productController = {
                 old_price: originalPrice,
                 discount: discountValue,
                 discount_type: type,
-                sale: discountValue > 0 ? true : false,
+                sale: discountValue > 0,
                 format: format || 'video',
                 author,
                 stock: stock === '1',
@@ -284,7 +278,6 @@ let productController = {
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
-
 
             res.redirect('/products');
         } catch (error) {
@@ -304,18 +297,19 @@ let productController = {
 
             const productCopy = product.toJSON();
 
-            // Asegurarse de que tags sea un array
             if (typeof productCopy.tags === 'string') {
                 try {
                     productCopy.tags = JSON.parse(productCopy.tags);
-                } catch (e) {
+                } catch {
                     productCopy.tags = [];
                 }
             }
 
             return res.render('products/productEdit', {
                 title: 'Editar Producto',
-                product: productCopy
+                product: productCopy,
+                errors: {},
+                oldData: productCopy
             });
 
         } catch (error) {
@@ -325,20 +319,28 @@ let productController = {
     },
     // Funcion para editar productos
     updateProduct: async (req, res) => {
+        const { validationResult } = require('express-validator');
+        const errors = validationResult(req);
+
+        if (!errors.isEmpty()) {
+            const id = req.params.id;
+            const product = await Product.findByPk(id);
+            const oldData = { ...req.body, id };
+            return res.render('products/productEdit', {
+                title: 'Editar Producto',
+                product: oldData,
+                errors: errors.mapped(),
+                oldData
+            });
+        }
+
         try {
             const id = req.params.id;
-            console.log('📂 Archivos recibidos:', req.files);
-
-            if (!req.body || Object.keys(req.body).length === 0) {
-                return res.status(400).json({ error: 'No data received in update' });
-            }
-
             const product = await Product.findByPk(id);
             if (!product) {
                 return res.status(404).send('Producto no encontrado');
             }
 
-            // 1. Eliminar imágenes marcadas
             let toDelete = req.body.deleteImages || [];
             if (typeof toDelete === 'string') toDelete = [toDelete];
 
@@ -353,27 +355,34 @@ let productController = {
                 if (fs.existsSync(filePath)) fs.unlinkSync(filePath);
             });
 
-            // 2. Agregar nuevas imágenes
             const newImages = req.files?.map(file => file.filename) || [];
             currentImages.push(...newImages);
 
-            // 3. Procesar tags
             const parsedTags = req.body.tags
                 ? req.body.tags.split(',').map(t => t.trim()).filter(Boolean)
                 : [];
 
             const discount = parseFloat(req.body.discount) || 0;
+            const discountType = req.body.discountType || 'percentage';
+            const originalPrice = parseFloat(req.body.price);
 
-            // 4. Actualizar en BD
+            let finalPrice = originalPrice;
+            if (discount > 0) {
+                finalPrice = discountType === 'percentage'
+                    ? originalPrice * (1 - discount / 100)
+                    : Math.max(0, originalPrice - discount);
+            }
+
             await product.update({
                 title: req.body.title,
                 description: req.body.description,
                 category: req.body.category,
-                price: parseFloat(req.body.price),
-                discount: parseFloat(req.body.discount) || 0,
-                discount_type: req.body.discountType || 'percentage',
+                price: finalPrice,
+                old_price: originalPrice,
+                discount,
+                discount_type: discountType,
                 stock: req.body.stock === "1",
-                sale: discount > 0 ? true : false,
+                sale: discount > 0,
                 author: req.body.author,
                 tags: parsedTags,
                 format: req.body.format,

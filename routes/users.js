@@ -6,13 +6,15 @@ const isAuthenticated = require('../middlewares/isAuthenticated');
 const upload = require('../middlewares/uploadMiddleware.js');
 const isProfileOwner = require('../middlewares/isProfileOwner');
 const isAdmin = require('../middlewares/isAdmin');
+const validateUser = require('../middlewares/validateUser');
+const validateLogin = require('../middlewares/validateLogin.js')
 
 /* GET users listing. */
 router.get('/admin' , isAdmin, isAuthenticated, userController.adminList);
-router.get('/register', userController.register);
-router.post('/store', userController.userRegister);
+router.get('/register', validateUser, userController.register);
+router.post('/store', validateUser, userController.userRegister);
 router.get('/login', userController.login);
-router.post('/login', userController.userLogin);
+router.post('/login', validateLogin, userController.userLogin);
 router.get('/change-password', isAuthenticated, (req, res) => {
   res.render('users/changePassword');
 });

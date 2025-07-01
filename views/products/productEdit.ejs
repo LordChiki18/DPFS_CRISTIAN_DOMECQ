@@ -2,134 +2,126 @@
 <html lang="es">
 <% include ../partials/head.ejs %>
 
-    <body>
-        <% include ../partials/header.ejs %>
+<body>
+    <% include ../partials/header.ejs %>
 
-            <section class="form-section-products">
-                <div class="container">
-                    <div class="form-container-products">
-                        <h2 class="form-title-products">Editar Contenido Digital</h2>
+    <section class="form-section-products">
+        <div class="container">
+            <div class="form-container-products">
+                <h2 class="form-title-products">Editar Contenido Digital</h2>
 
-                        <form action="/products/<%= product.id %>?_method=PUT" method="POST" id="editForm" enctype="multipart/form-data">
+                <% const data = oldData || product; %>
 
-                            <input type="hidden" id="contentId" name="contentId" value="<%= product.id %>">
+                <form action="/products/<%= data.id %>?_method=PUT" method="POST" enctype="multipart/form-data">
+                    <input type="hidden" name="contentId" value="<%= data.id %>">
 
-                            <!-- Título -->
-                            <div class="form-group-products">
-                                <label for="title">Título *</label>
-                                <input type="text" id="title" name="title" required value="<%= product.title %>"
-                                    placeholder="Ingrese el título del contenido">
-                            </div>
-
-                            <!-- Descripción -->
-                            <div class="form-group-products">
-                                <label for="description">Descripción *</label>
-                                <textarea id="description" name="description"
-                                    required><%= product.description %></textarea>
-                            </div>
-
-                            <!-- Tipo de Contenido -->
-                            <div class="form-group-products">
-                                <label for="category">Tipo de Contenido *</label>
-                                <select id="category" name="category" required>
-                                    <option value="">Seleccione</option>
-                                    <option value="course" <%=product.category==='course' ? 'selected' : '' %>>Curso
-                                    </option>
-                                    <option value="music" <%=product.category==='music' ? 'selected' : '' %>>Música
-                                    </option>
-                                    <option value="ebook" <%=product.category==='ebook' ? 'selected' : '' %>>E-book
-                                    </option>
-                                </select>
-                            </div>
-
-                            <!-- Precio y Descuento -->
-                            <div class="form-row-products">
-                                <div class="form-group">
-                                    <label for="price">Precio (PYG) *</label>
-                                    <input type="number" id="price" name="price" required step="0.01"
-                                        value="<%= product.price || 0 %>">
-                                </div>
-                                <div class="form-group">
-                                    <label for="discount">Descuento</label>
-                                    <input type="number" id="discount" name="discount" min="0"
-                                        value="<%= product.discount || 0 %>">
-                                </div>
-                            </div>
-
-                            <!-- Estado y Oferta -->
-                            <div class="form-row-products">
-                                <div class="form-group-products">
-                                    <label for="stock">Estado del Contenido</label>
-                                    <select id="stock" name="stock">
-                                        <option value="1" <%=product.stock ? 'selected' : '' %>>Activo</option>
-                                        <option value="0" <%=!product.stock ? 'selected' : '' %>>Inactivo</option>
-                                    </select>
-                                </div>
-                            </div>
-
-                            <!-- Autor y Etiquetas -->
-                            <div class="form-group-products">
-                                <label for="author">Author *</label>
-                                <input type="text" id="author" name="author" required
-                                    value="<%= product.author || '' %>">
-                                <label for="tags">Etiquetas (separadas por comas)</label>
-                                <input type="text" id="tags" name="tags"
-                                    value="<%= product.tags ? product.tags.join(', ') : '' %>">
-                                <small>Ayuda a los usuarios a encontrar tu contenido</small>
-                            </div>
-
-                            <!-- Formato -->
-                            <div class="form-group-products">
-                                <label for="format">Formato del Contenido</label>
-                                <select id="format" name="format">
-                                    <option value="video" <%=product.format==='video' ? 'selected' : '' %>>Video
-                                    </option>
-                                    <option value="audio" <%=product.format==='audio' ? 'selected' : '' %>>Audio
-                                    </option>
-                                    <option value="document" <%=product.format==='document' ? 'selected' : '' %>
-                                        >Documento</option>
-                                    <option value="ebook" <%=product.format==='ebook' ? 'selected' : '' %>>E-book
-                                    </option>
-                                </select>
-                            </div>
-
-                            <div class="form-group-products">
-                                <label for="newImages">Agregar nuevas imágenes</label>
-                                <input type="file" name="newImages" id="newImages" multiple accept="image/*">
-                            </div>
-
-                            <div class="form-group-products">
-                                <label>Imágenes actuales</label>
-                                <div class="current-images">
-                                    <% if (Array.isArray(product.images)) { %>
-                                        <% product.images.forEach((image, index)=> { %>
-                                            <div class="thumbnail-wrapper">
-                                                <img src="/images/products/<%= image %>" alt="Imagen <%= index + 1 %>"
-                                                    style="width: 80px; height: 80px;">
-                                                <label>
-                                                    <input type="checkbox" name="deleteImages"
-                                                        value="/images/products/<%= image %>">
-                                                    Eliminar
-                                                </label>
-                                            </div>
-                                            <% }) %>
-                                                <% } %>
-                                </div>
-                            </div>
-
-
-                            <input type="hidden" name="updatedAt" value="<%= new Date().toISOString() %>">
-
-                            <div class="form-actions-products">
-                                <button type="submit" class="btn btn-primary-products">💾 Actualizar Contenido</button>
-                                <a href="/products" class="btn btn-secondary-products">📋 Ver Lista</a>
-                            </div>
-                        </form>
+                    <!-- Título -->
+                    <div class="form-group-products">
+                        <label for="title">Título *</label>
+                        <input type="text" id="title" name="title" required value="<%= data.title || '' %>" placeholder="Ingrese el título del contenido">
+                        <% if (errors?.title) { %><p class="error-msg"><%= errors.title.msg %></p><% } %>
                     </div>
-                </div>
-            </section>
 
-            <% include ../partials/footer.ejs %>
-    </body>
+                    <!-- Descripción -->
+                    <div class="form-group-products">
+                        <label for="description">Descripción *</label>
+                        <textarea id="description" name="description" required><%= data.description || '' %></textarea>
+                        <% if (errors?.description) { %><p class="error-msg"><%= errors.description.msg %></p><% } %>
+                    </div>
+
+                    <!-- Tipo de Contenido -->
+                    <div class="form-group-products">
+                        <label for="category">Tipo de Contenido *</label>
+                        <select id="category" name="category" required>
+                            <option value="">Seleccione</option>
+                            <option value="course" <%= data.category === 'course' ? 'selected' : '' %>>Curso</option>
+                            <option value="music" <%= data.category === 'music' ? 'selected' : '' %>>Música</option>
+                            <option value="ebook" <%= data.category === 'ebook' ? 'selected' : '' %>>E-book</option>
+                        </select>
+                        <% if (errors?.category) { %><p class="error-msg"><%= errors.category.msg %></p><% } %>
+                    </div>
+
+                    <!-- Precio y Descuento -->
+                    <div class="form-row-products">
+                        <div class="form-group">
+                            <label for="price">Precio (PYG) *</label>
+                            <input type="number" id="price" name="price" step="0.01" required value="<%= data.price || 0 %>">
+                            <% if (errors?.price) { %><p class="error-msg"><%= errors.price.msg %></p><% } %>
+                        </div>
+                        <div class="form-group">
+                            <label for="discount">Descuento</label>
+                            <input type="number" id="discount" name="discount" min="0" value="<%= data.discount || 0 %>">
+                        </div>
+                    </div>
+
+                    <!-- Estado -->
+                    <div class="form-row-products">
+                        <div class="form-group-products">
+                            <label for="stock">Estado del Contenido</label>
+                            <select id="stock" name="stock">
+                                <option value="1" <%= data.stock ? 'selected' : '' %>>Activo</option>
+                                <option value="0" <%= !data.stock ? 'selected' : '' %>>Inactivo</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Autor y Etiquetas -->
+                    <div class="form-group-products">
+                        <label for="author">Author *</label>
+                        <input type="text" id="author" name="author" required value="<%= data.author || '' %>">
+                        <% if (errors?.author) { %><p class="error-msg"><%= errors.author.msg %></p><% } %>
+
+                        <label for="tags">Etiquetas (separadas por comas)</label>
+                        <input type="text" id="tags" name="tags" value="<%= Array.isArray(data.tags) ? data.tags.join(', ') : data.tags || '' %>">
+                        <small>Ayuda a los usuarios a encontrar tu contenido</small>
+                    </div>
+
+                    <!-- Formato -->
+                    <div class="form-group-products">
+                        <label for="format">Formato del Contenido</label>
+                        <select id="format" name="format">
+                            <option value="video" <%= data.format === 'video' ? 'selected' : '' %>>Video</option>
+                            <option value="audio" <%= data.format === 'audio' ? 'selected' : '' %>>Audio</option>
+                            <option value="document" <%= data.format === 'document' ? 'selected' : '' %>>Documento</option>
+                            <option value="ebook" <%= data.format === 'ebook' ? 'selected' : '' %>>E-book</option>
+                        </select>
+                    </div>
+
+                    <!-- Nuevas Imágenes -->
+                    <div class="form-group-products">
+                        <label for="newImages">Agregar nuevas imágenes</label>
+                        <input type="file" name="newImages" id="newImages" multiple accept="image/*">
+                    </div>
+
+                    <!-- Imágenes actuales -->
+                    <div class="form-group-products">
+                        <label>Imágenes actuales</label>
+                        <div class="current-images">
+                            <% if (Array.isArray(product.images)) { %>
+                                <% product.images.forEach((image, index) => { %>
+                                    <div class="thumbnail-wrapper">
+                                        <img src="/images/products/<%= image %>" alt="Imagen <%= index + 1 %>" style="width: 80px; height: 80px;">
+                                        <label>
+                                            <input type="checkbox" name="deleteImages" value="/images/products/<%= image %>"> Eliminar
+                                        </label>
+                                    </div>
+                                <% }) %>
+                            <% } %>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="updatedAt" value="<%= new Date().toISOString() %>">
+
+                    <div class="form-actions-products">
+                        <button type="submit" class="btn btn-primary-products">💾 Actualizar Contenido</button>
+                        <a href="/products" class="btn btn-secondary-products">📋 Ver Lista</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <% include ../partials/footer.ejs %>
+</body>
 
 </html>

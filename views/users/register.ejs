@@ -25,49 +25,95 @@
                   <label for="first_name">Nombre<span class="required">*</span></label>
                   <input type="text" id="first_name" name="first_name" value="<%= oldData?.first_name || '' %>"
                     required>
+                  <% if (errors?.first_name) { %>
+                    <div class="text-danger">
+                      <%= errors.first_name.msg %>
+                    </div>
+                    <% } %>
+
                 </div>
 
                 <div class="form-group">
                   <label for="last_name">Apellido<span class="required">*</span></label>
                   <input type="text" id="last_name" name="last_name" value="<%= oldData?.last_name || '' %>" required>
+                  <% if (errors?.last_name) { %>
+                    <div class="text-danger">
+                      <%= errors.last_name.msg %>
+                    </div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
                   <label for="email">Email<span class="required">*</span></label>
                   <input type="email" id="email" name="email" value="<%= oldData?.email || '' %>" required>
+                  <% if (errors?.email) { %>
+                    <div class="text-danger">
+                      <%= errors.email.msg %>
+                    </div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
                   <label for="confirmEmail">Confirmar Email<span class="required">*</span></label>
                   <input type="email" id="confirmEmail" name="confirmEmail" value="<%= oldData?.confirmEmail || '' %>"
                     required>
+                  <% if (errors?.confirmEmail) { %>
+                    <div class="text-danger">
+                      <%= errors.confirmEmail.msg %>
+                    </div>
+                    <% } %>
+
                 </div>
 
                 <div class="form-group">
                   <label for="password">Contraseña<span class="required">*</span></label>
                   <input type="password" id="password" name="password" value="<%= oldData?.password || '' %>" required>
+                  <% if (errors?.password) { %>
+                    <div class="text-danger">
+                      <%= errors.password.msg %>
+                    </div>
+                    <% } %>
                 </div>
 
                 <div class="form-group">
                   <label for="confirmPassword">Confirmar Contraseña<span class="required">*</span></label>
                   <input type="password" id="confirmPassword" name="confirmPassword"
                     value="<%= oldData?.confirmPassword || '' %>" required>
+                  <% if (errors?.confirmPassword) { %>
+                    <div class="text-danger">
+                      <%= errors.confirmPassword.msg %>
+                    </div>
+                    <% } %>
+
                 </div>
 
                 <div class="form-group">
                   <label for="gender">Genero<span class="required">*</span></label>
                   <select id="gender" name="gender" class="gender-select" required>
                     <option value="">-- Selecciona --</option>
-                    <option value="Mujer">Mujer</option>
-                    <option value="Hombre">Hombre</option>
-                    <option value="Otro">Otro</option>
+                    <option value="Mujer" <%=oldData.gender==='Mujer' ? 'selected' : '' %>>Mujer</option>
+                    <option value="Hombre" <%=oldData.gender==='Hombre' ? 'selected' : '' %>>Hombre</option>
+                    <option value="Otro" <%=oldData.gender==='Otro' ? 'selected' : '' %>>Otro</option>
                   </select>
+                  <% if (errors?.gender) { %>
+                    <div class="text-danger">
+                      <%= errors.gender.msg %>
+                    </div>
+                    <% } %>
+
                 </div>
 
 
                 <div class="checkbox-group">
-                  <input type="checkbox" id="agreeprivacy" name="agreeprivacy" required>
-                  <label for="agreeprivacy">Aceptar Terminos de Privacidad</label>
+                  <input type="checkbox" id="agreeprivacy" name="agreeprivacy" <%=oldData.agreeprivacy ? 'checked' : ''
+                    %> required>
+                  <label for="agreeprivacy">Aceptar Términos de Privacidad</label>
+                  <% if (errors?.agreeprivacy) { %>
+                    <div class="text-danger">
+                      <%= errors.agreeprivacy.msg %>
+                    </div>
+                    <% } %>
+
                 </div>
 
                 <input type="hidden" id="createdAt" name="createdAt" value="<%= new Date().toISOString() %>">
