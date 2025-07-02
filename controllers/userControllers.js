@@ -423,7 +423,59 @@ let userController = {
         await user.save()
 
         res.redirect('/users/login');
-    }
+    },
+    // Listado para API (JSON)
+    listApi: async (req, res) => {
+        try {
+            const users = await User.findAll({
+                attributes: ['id', 'first_name', 'last_name', 'email'] // Sin campos sensibles
+            });
+
+            const usersList = users.map(user => ({
+                id: user.id,
+                name: `${user.first_name} ${user.last_name}`,
+                email: user.email,
+                detail: `/api/users/${user.id}`
+            }));
+
+            res.json({
+                count: users.length,
+                users: usersList
+            });
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al obtener usuarios' });
+        }
+    },
+
+    // Detalle para API (JSON)
+    detailApi: async (req, res) => {
+        try {
+            const id = parseInt(req.params.id);
+            const user = await User.findByPk(id, {
+                attributes: { exclude: ['password', 'category'] } // Excluir campos sensibles
+            });
+
+            if (!user) {
+                return res.status(404).json({ error: 'Usuario no encontrado' });
+            }
+
+            // Construir nombre completo para consistencia
+            const userData = user.toJSON();
+            userData.name = `${userData.first_name} ${userData.last_name}`;
+
+            // Opcional: si profile_picture es solo un nombre, concatenar URL base:
+            if (userData.profile_picture && !userData.profile_picture.startsWith('http')) {
+                userData.profile_picture = `${req.protocol}://${req.get('host')}/images/users/${userData.profile_picture}`;
+            }
+
+            res.json(userData);
+        } catch (error) {
+            console.error(error);
+            res.status(500).json({ error: 'Error al obtener usuario' });
+        }
+    },
+
 };
 
 module.exports = userController;

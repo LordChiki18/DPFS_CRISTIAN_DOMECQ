@@ -409,6 +409,58 @@ let productController = {
 
         return res.redirect('/products');
     },
+    listApi: async (req, res) => {
+        try {
+            const products = await Product.findAll();
+
+            // Agrupar por categoría
+            const countByCategory = {};
+            products.forEach(p => {
+                const cat = p.category || 'Sin categoría';
+                countByCategory[cat] = (countByCategory[cat] || 0) + 1;
+            });
+
+            const productList = products.map(p => ({
+                id: p.id,
+                name: p.title,
+                description: p.description,
+                category: p.category,
+                detail: `/api/products/${p.id}`
+            }));
+
+            res.json({
+                count: products.length,
+                countByCategory,
+                products: productList
+            });
+        } catch (error) {
+            console.error('Error en API /products:', error);
+            res.status(500).json({ error: 'Error interno al obtener productos' });
+        }
+    },
+    // API - Detalle de un producto
+    detailApi: async (req, res) => {
+        try {
+            const id = req.params.id;
+            const product = await Product.findByPk(id);
+
+            if (!product) {
+                return res.status(404).json({ error: 'Producto no encontrado' });
+            }
+
+            const productData = product.toJSON();
+
+            // Agregar URL completa de las imágenes
+            productData.images = productData.images.map(img =>
+                `${req.protocol}://${req.get('host')}/images/products/${img}`
+            );
+
+            res.json(productData);
+        } catch (error) {
+            console.error('Error en API /products/:id', error);
+            res.status(500).json({ error: 'Error interno al obtener producto' });
+        }
+    },
 };
 
 module.exports = productController;

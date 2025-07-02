@@ -9,6 +9,9 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var productsRouter = require('./routes/products.js');
 var cartRouter = require('./routes/cart.js')
+var apiUsersRoutes = require('./routes/apiUsers.js')
+var apiProductsRoutes = require('./routes/apiProducts.js')
+var cors = require('cors');
 
 var app = express();
 
@@ -23,6 +26,7 @@ const methodOverride = require('method-override');
 app.use(methodOverride('_method'));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(cors());
 
 app.use(session({
   secret: 'M;gs7:e!9(M?Qbq&v8>vQvmcT^t{jENAO|>vf#[}FwNS+jV$}SU~]Wsqi7;W/l', // poné una clave secreta larga y única
@@ -54,6 +58,8 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/products', productsRouter);
 app.use('/cart', cartRouter);
+app.use('/api/users', apiUsersRoutes);
+app.use('/api/products', apiProductsRoutes);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
